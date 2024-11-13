@@ -2,6 +2,25 @@
   text-align: center;
 }
 
+.thread-img {
+  width: 100vw;
+  height: 10vh;
+}
+
+.pt-sans-caption-regular {
+  font-family: "PT Sans Caption", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.pt-sans-caption-bold {
+  font-family: "PT Sans Caption", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+
+/* 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -35,4 +54,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */
