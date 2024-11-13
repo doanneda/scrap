@@ -1,10 +1,18 @@
 import logo from './logo.svg';
 import './App.css';
 
+import threadImage from './assets/thread.png';
+
+
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
+      <img src={threadImage} className="thread-img" />
+
+      <div>
+          test
+      </div>  
+      {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
@@ -17,7 +25,7 @@ function App() {
         >
           Hello World
         </a>
-      </header>
+      </header> */}
     </div>
   );
 }
