@@ -8,11 +8,11 @@ import threadImage from './assets/thread.png';
 function App() {
   return (
     <div className="App">
-      <img src={threadImage} className="thread-img" />
+      {/* <img src={threadImage} className="thread-img" />
 
       <div>
           test
-      </div>  
+      </div>   */}
       {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
