@@ -1,83 +1,47 @@
-import React, {useState} from 'react';
-import {DndContext} from '@dnd-kit/core';
+import React, { useState } from 'react';
+import { DndContext, useDraggable } from '@dnd-kit/core';
 
-import Droppable from './Droppable';
-import Draggable from './Draggable';
-import {Translate} from '@dnd-kit/core';
+function App() {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
 
-export default function App() {
-  const [isDropped, setIsDropped] = useState(false);
-  const draggableMarkup = (
-    <Draggable>Drag me</Draggable>
-  );
+  function DraggableButton() {
+    const { attributes, listeners, setNodeRef, transform } = useDraggable({
+      id: 'draggable-button',
+    });
 
-  const [{translate}, setTranslate] = useState<{
-    initialTranslate: Translate,
-    translate: Translate,
-  }>({initialTranslate: defaultCoordinates, translate: defaultCoordinates});
-  
+    const style = {
+      transform: `translate(${position.x + (transform?.x || 0)}px, ${position.y + (transform?.y || 0)}px)`,
+      padding: '10px 20px',
+      backgroundColor: '#007bff',
+      color: '#fff',
+      border: 'none',
+      borderRadius: '5px',
+      cursor: 'pointer',
+      position: 'relative',
+    };
+
+    return (
+      <button ref={setNodeRef} style={style} {...listeners} {...attributes}>
+        Drag Me
+      </button>
+    );
+  }
+
+  const handleDragEnd = (event) => {
+    const { delta } = event;
+    setPosition((prevPosition) => ({
+      x: prevPosition.x + delta.x,
+      y: prevPosition.y + delta.y,
+    }));
+  };
+
   return (
-    <DndContext
-      onDragMove={({delta}) => {
-        setTranslate(({initialTranslate}) => ({
-          initialTranslate,
-          translate: {
-            x: initialTranslate.x + delta.x - initialWindowScroll.x,
-            y: initialTranslate.y + delta.y - initialWindowScroll.y,
-          },
-        }));
-      }}
-      onDragEnd={() => {
-        setTranslate(({translate}) => {
-          return {
-            translate,
-            initialTranslate: translate,
-          };
-        });
-        setInitialWindowScroll(defaultCoordinates);
-      }}
-      onDragCancel={() => {
-        setTranslate(({initialTranslate}) => ({
-          translate: initialTranslate,
-          initialTranslate,
-        }));
-        setInitialWindowScroll(defaultCoordinates);
-      }}
-      >
-        <DraggableItem
-          axis={axis}
-          label={label}
-          handle={handle}
-          style={style}
-          translate={translate}
-        />
+    <DndContext onDragEnd={handleDragEnd}>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '100px' }}>
+        <DraggableButton />
+      </div>
     </DndContext>
   );
+}
 
-    function DraggableItem({
-      axis,
-      label,
-      style,
-      translate,
-      handle,
-    }) {
-      const {attributes, isDragging, listeners, setNodeRef} = useDraggable({
-        id: 'draggable',
-      });
-    
-      return (
-        <Draggable
-          ref={setNodeRef}
-          dragging={isDragging}
-          handle={handle}
-          label={label}
-          listeners={listeners}
-          style={style}
-          translate={translate}
-          axis={axis}
-          {...attributes}
-        />
-      );
-    }
-  
-};
+export default App;
