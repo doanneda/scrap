@@ -1,0 +1,64 @@
+.profile-container {
+    margin: 0 auto;
+    padding: 16px;
+    font-family: Arial, sans-serif;
+    color: #333;
+    max-width: 800px; /* Constrains the entire profile section */
+  }
+  
+  .profile-header {
+    display: flex;
+    align-items: flex-start; /* Align items at the top */
+    margin-bottom: 24px;
+  }
+  
+  .profile-picture {
+    width: 160px;
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 64px; /* Emoji size */
+    background-color: #f0f0f0; /* Placeholder gray color */
+    border-radius: 50%; /* Makes it a circle */
+    margin-right: 16px;
+  }
+  
+  .profile-info {
+    flex: 1;
+    text-align: left; /* Left-justify the text */
+  }
+  
+  .profile-name {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .profile-bio {
+    font-size: 18px;
+    color: #666;
+  }
+  
+  .scrapbook-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    padding: 0 16px;
+  }
+  
+  .scrapbook-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    height: 200px; /* Adjust height of scrapbook items */
+  }
+  
+  .placeholder-image {
+    font-size: 36px;
+    color: #aaa;
+  }
+  
