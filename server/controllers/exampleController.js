@@ -1,4 +1,4 @@
-const Example = require('../schemas/exampleSchema');
+const Example = require('../models/exampleModels');
 
 // Example of creating a document in the database
 const createExample = async (req, res) => {
