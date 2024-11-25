@@ -126,7 +126,7 @@ export default function CreatePage() {
     // Resize images and convert to Base64
     const imagePromises = images.map((file) => resizeImage(file));
 
-    try {
+    try { // comment
       const resizedBase64Images = await Promise.all(imagePromises);
 
       // Send to server
