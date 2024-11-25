@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 
 const scrapPageSchema = new mongoose.Schema({
-  // name: { // user name or id associated with the scrap book page
-  //   required: true,
-  //   type: String,
-  // },
-  user: {
-    type: mongoose.Schema.Types.ObjectId, // Reference the User model
-    ref: 'User',
+  user: { // user name or id associated with the scrap book page
     required: true,
+    type: String,
   },
+  // user: {
+  //   type: mongoose.Schema.Types.ObjectId, // Reference the User model
+  //   ref: 'User',
+  //   required: true,
+  // },
   binaryImages: { // images for scrap book page 
     required: false,
     type: [ Buffer ]
