@@ -12,7 +12,7 @@ const createScrapPage = async (req, res) => {
   }
 };
 
-exports.getAllScrapPages = async (req, res) => {
+const getAllScrapPages = async (req, res) => {
   try {
     const scrapPages = await ScrapPage.find();
 
@@ -29,13 +29,6 @@ exports.getAllScrapPages = async (req, res) => {
     console.error('Error fetching scrapbook pages:', error);
     res.status(500).json({ error: 'Failed to fetch scrapbook pages' });
   }
-  // try {
-  //   const scrapPages = await ScrapPage.find(); // Fetch all documents
-  //   res.status(200).json(scrapPages); // Send them as JSON response
-  // } catch (error) {
-  //   console.error('Error fetching scrapbook pages:', error);
-  //   res.status(500).json({ error: 'Failed to fetch scrapbook pages' });
-  // }
 }
 
 module.exports = {
