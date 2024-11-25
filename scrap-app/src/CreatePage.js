@@ -6,6 +6,7 @@ export default function CreatePage() {
   const [images, setImages] = useState([]); // Store the uploaded images
   const [description, setDescription] = useState(''); // Store the description
   const [error, setError] = useState(''); // Error message for validation feedback
+  const name = "TEST"
 
   const handleNumImagesChange = (event) => {
     const newNumImages = parseInt(event.target.value, 10);
@@ -28,7 +29,7 @@ export default function CreatePage() {
     setImages(updatedImages);
   };
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     // Check if all required images are uploaded
     if (images.filter((image) => image !== null).length !== numImages) {
       setError(`Please upload all ${numImages} images before proceeding.`);
@@ -39,12 +40,37 @@ export default function CreatePage() {
     console.log('Selected Images:', images);
     console.log('Description:', description);
 
+    // Upload the images to MongoDB
+    try {
+      const scrapData = {
+        name,
+        images,
+        description,
+        // color,
+        // stickers
+      };
+      const res = await axios.post(`${process.env.EXPO_PUBLIC_SERVER_URL}/scrap-pages/post`, scrapData);
+      if (res.data.error) {
+        console.error(res.data.error);
+      } else {
+        const userId = res.data._id;
+        await Storage({ key: 'userId', value: userId, saveKey: true });
+        // navigation.navigate('Home');
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+
     // Reset state
     setError('');
     setImages(Array(numImages).fill(null));
     setDescription('');
     alert('Upload successful!');
   };
+
+  useEffect(() => {
+    handleUpload();
+  }, []);
 
   return (
     <div>
