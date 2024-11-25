@@ -1,7 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
 import DraggableImage from './DraggableImage';
+import DraggableSticker from './DraggableSticker';
 import Page from './Page';
 import { DndContext } from '@dnd-kit/core';
+
+// Import stickers
+import Sticker1 from './assets/stickers/frog.png';
+import Sticker2 from './assets/stickers/lotus.png';
 
 export default function DragAndDrop() {
   const pageRef = useRef(null);
@@ -25,8 +30,12 @@ export default function DragAndDrop() {
       size: {width: 160, height: 200}},
   ]);
 
+  const [stickers, setStickers] = useState([
+    { id: 'sticker1', x: 300, y: 200, size: { width: 80, height: 80 }, file: Sticker1 },
+    { id: 'sticker2', x: 100, y: 300, size: { width: 90, height: 90 }, file: Sticker2 },
+  ]);
+
   const [bounds, setBounds] = useState({ top: 0, left: 0, bottom: 0, right: 0 });
-  const imageRefs = useRef({}); // Store refs for all images
 
   useEffect(() => {
     if (pageRef.current) {
@@ -42,38 +51,37 @@ export default function DragAndDrop() {
   }, []);
 
   const handleDragEnd = (event) => {
-    const { delta, active } = event; // `active` contains the `id` of the dragged item
-  
-    setImages((prevImages) =>
-      prevImages.map((image) =>
-        image.id === active.id
-          ? {
-              ...image,
-              x: Math.min(
-                Math.max(image.x + delta.x, bounds.left),
-                bounds.right - image.size.width // Use size.width directly
-              ),
-              y: Math.min(
-                Math.max(image.y + delta.y, bounds.top),
-                bounds.bottom - image.size.height // Use size.height directly
-              ),
-            }
-          : image
-      )
-    );
-  };
-  
+    const { delta, active } = event;
 
-  useEffect(() => {
-    // Update dimensions for each image
-    images.forEach((image) => {
-      const ref = imageRefs.current[image.id];
-      if (ref) {
-        const { width, height } = ref.getBoundingClientRect();
-        imageRefs.current[image.id] = { ...imageRefs.current[image.id], width, height };
-      }
-    });
-  }, [images]);
+    // Handle images
+    if (active.id.startsWith('image')) {
+      setImages((prevImages) =>
+        prevImages.map((image) =>
+          image.id === active.id
+            ? {
+                ...image,
+                x: Math.min(Math.max(image.x + delta.x, bounds.left), bounds.right - image.size.width),
+                y: Math.min(Math.max(image.y + delta.y, bounds.top), bounds.bottom - image.size.height),
+              }
+            : image
+        )
+      );
+    }
+    // Handle stickers
+    if (active.id.startsWith('sticker')) {
+      setStickers((prevStickers) =>
+        prevStickers.map((sticker) =>
+          sticker.id === active.id
+            ? {
+                ...sticker,
+                x: Math.min(Math.max(sticker.x + delta.x, bounds.left), bounds.right - sticker.size.width),
+                y: Math.min(Math.max(sticker.y + delta.y, bounds.top), bounds.bottom - sticker.size.height),
+              }
+            : sticker
+        )
+      );
+    }
+  };
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
@@ -81,13 +89,19 @@ export default function DragAndDrop() {
         {images.map((image) => (
           <DraggableImage
             key={image.id}
-            id={image.id} // Pass unique id for each image
-            ref={(node) => {
-              if (node) imageRefs.current[image.id] = node;
-            }}
+            id={image.id}
             position={{ x: image.x, y: image.y }}
-            imageUrl={image.imageUrl} // Pass specific URL for each image
             size={image.size}
+            imageUrl={image.imageUrl}
+          />
+        ))}
+        {stickers.map((sticker) => (
+          <DraggableSticker
+            key={sticker.id}
+            id={sticker.id}
+            position={{ x: sticker.x, y: sticker.y }}
+            size={sticker.size}
+            imageFile={sticker.file}
           />
         ))}
       </Page>

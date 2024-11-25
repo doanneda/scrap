@@ -24,8 +24,8 @@ const DraggableImage = forwardRef(({ id, position, imageUrl, size = { width: 100
   return (
     <img
       ref={(node) => {
-        setNodeRef(node); // For dragging functionality
-        if (ref) ref.current = node; // Assign the node to the forwarded ref
+        setNodeRef(node);
+        if (ref) ref.current = node;
       }}
       src={imageUrl || 'https://via.placeholder.com/100'}
       alt="Draggable"
