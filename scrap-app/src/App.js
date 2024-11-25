@@ -46,16 +46,16 @@ import Signup from "./components/Signup-new";
 import Login from "./components/Login-new";
 
 function App() {
-    const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);
 
-    useEffect(() => {
+  useEffect(() => {
       const token = localStorage.getItem("token");
       if (token) {
-        setUser(token); // Or validate the token here if needed (e.g., check expiration)
+          setUser(true); // Token exists, so user is logged in
       } else {
-        setUser(null);
+          setUser(false); // No token, so user is not logged in
       }
-    }, []);
+  }, []);
 
     return (
         <Routes>
