@@ -12,7 +12,7 @@ const createScrapPage = async (req, res) => {
   }
 };
 
-exports.getAllScrapPages = async (req, res) => {
+const getAllScrapPages = async (req, res) => {
   try {
     const scrapPages = await ScrapPage.find();
 
