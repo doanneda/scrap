@@ -31,9 +31,9 @@ export default function DragAndDrop() {
 
       setBounds({
         top: 0,
-        left: -rect.width/2,
+        left: 0,
         bottom: rect.height,
-        right: rect.width/2,
+        right: rect.width,
       });
     }
   }, []);
