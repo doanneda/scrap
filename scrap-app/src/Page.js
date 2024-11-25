@@ -1,20 +1,18 @@
 import React, { forwardRef } from 'react';
 
-const Page = forwardRef(function Page({ children }, ref) {
-  const style = {
-    width: '300px',
-    height: '300px',
-    margin: '50px auto',
-    border: '2px dashed #333',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-    padding: '10px', // Ensure padding isn't affecting the layout
-  };
-
+const Page = forwardRef(({ size, children }, ref) => {
   return (
-    <div ref={ref} style={style}>
+    <div
+      ref={ref}
+      style={{
+        position: 'relative',
+        width: `${size}px`,
+        height: `${size}px`,
+        border: '2px dashed black',
+        margin: '50px auto',
+        overflow: 'visible',
+      }}
+    >
       {children}
     </div>
   );

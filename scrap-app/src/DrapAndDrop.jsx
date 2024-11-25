@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import DraggableImage from './DraggableImage';
+import Page from './Page';
 import { DndContext } from '@dnd-kit/core';
 
 export default function DragAndDrop() {
@@ -10,6 +11,7 @@ export default function DragAndDrop() {
   const imageRef = useRef(null);
 
   useEffect(() => {
+
     if (pageRef.current) {
       const rect = pageRef.current.getBoundingClientRect();
 
@@ -49,18 +51,10 @@ export default function DragAndDrop() {
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
-      <div
-        ref={pageRef}
-        style={{
-          position: 'relative',
-          width: '300px',
-          height: '300px',
-          border: '2px dashed black',
-          margin: '50px auto',
-        }}
-      >
-        <DraggableImage ref={imageRef} position={position} />
-      </div>
+      <Page ref={pageRef} size={700} >
+        <DraggableImage ref={imageRef} position={position} imageUrl='https://www.corvallisadvocate.com/wp-content/uploads/2015/09/blob-fish.jpg'/>
+        <DraggableImage ref={imageRef} position={position}/>
+      </Page>
     </DndContext>
   );
 }
