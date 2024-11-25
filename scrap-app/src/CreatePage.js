@@ -109,6 +109,7 @@ export default function CreatePage() {
       reader.readAsDataURL(file); // Reads the file as base64
     });
   };
+  
 
   const handleUpload = async () => {
     if (!userId) {
