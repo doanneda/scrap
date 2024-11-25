@@ -40,25 +40,29 @@
 // export default App;
 
 import { Route, Routes, Navigate } from "react-router-dom";
-import { useState } from "react"; // To manage login status within component
+import { useState, useEffect } from "react"; // To manage login status within component
 import Main from "./components/Main";
 import Signup from "./components/Signup-new";
 import Login from "./components/Login-new";
 
 function App() {
-    const [user, setUser] = useState(localStorage.getItem("token")); // Manage login state
-    
-    const handleLoginSuccess = (token) => {
-        localStorage.setItem("token", token); // Save the token to localStorage
-        setUser(token); // Update the state to reflect login success
-    };
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        setUser(token); // Or validate the token here if needed (e.g., check expiration)
+      } else {
+        setUser(null);
+      }
+    }, []);
 
     return (
         <Routes>
             {/* If the user is logged in, show Main, otherwise navigate to /login */}
             <Route path="/" element={user ? <Main /> : <Navigate replace to="/login" />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
+            <Route path="/login" element={<Login />} />
         </Routes>
     );
 }

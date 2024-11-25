@@ -97,6 +97,7 @@ const Login = () => {
             localStorage.setItem("token", res.data);
             // Use navigate to go to the main page after login
             navigate("/"); // Programmatic redirect
+            console.log(res.message); 
         } catch (error) {
             if (
                 error.response &&
