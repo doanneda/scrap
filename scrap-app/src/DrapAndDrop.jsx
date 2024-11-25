@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import DraggableImage from './DraggableImage';
 import { DndContext } from '@dnd-kit/core';
 
-function App() {
+export default function DragAndDrop() {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [bounds, setBounds] = useState({ top: 0, left: 0, bottom: 0, right: 0 });
   const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
@@ -66,5 +66,3 @@ function App() {
     </DndContext>
   );
 }
-
-export default App;
