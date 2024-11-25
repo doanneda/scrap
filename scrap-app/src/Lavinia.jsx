@@ -1,46 +1,68 @@
-// App.js
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import DraggableImage from './DraggableImage';
 import { DndContext } from '@dnd-kit/core';
-import DraggableButton from './DraggableButton';
-import Page from './Page';
 
 function App() {
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [bounds, setBounds] = useState({ top: 0, left: 0, bottom: 0, right: 0 });
+  const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
   const pageRef = useRef(null);
-  const [bounds, setBounds] = useState({ left: 0, top: 0, right: 0, bottom: 0 });
+  const imageRef = useRef(null);
 
-  // Calculate bounds on component mount and when pageRef changes
   useEffect(() => {
     if (pageRef.current) {
       const rect = pageRef.current.getBoundingClientRect();
+
       setBounds({
-        left: 0 - rect.width/2 + 50,
-        top: 0 - rect.height/2 + 25,
-        right: rect.width/2 - 50, // Button width
-        bottom: rect.height/2 - 25, // Button height
+        top: 0,
+        left: 0,
+        bottom: rect.height,
+        right: rect.width,
       });
     }
-  }, [pageRef]);
+  }, []);
+
+  useEffect(() => {
+    if (imageRef.current) {
+      const { width, height } = imageRef.current.getBoundingClientRect();
+      setImageDimensions({ width, height });
+    }
+  }, [imageRef.current]);
 
   const handleDragEnd = (event) => {
     const { delta } = event;
-    setPosition((prevPosition) => {
-      const newX = prevPosition.x + delta.x;
-      const newY = prevPosition.y + delta.y;
 
-      // Constrain within bounds
+    setPosition((prev) => {
+      const nextX = prev.x + delta.x;
+      const nextY = prev.y + delta.y;
+
       return {
-        x: Math.max(bounds.left, Math.min(newX, bounds.right)),
-        y: Math.max(bounds.top, Math.min(newY, bounds.bottom)),
+        x: Math.min(
+          Math.max(nextX, bounds.left),
+          bounds.right - imageDimensions.width
+        ),
+        y: Math.min(
+          Math.max(nextY, bounds.top),
+          bounds.bottom - imageDimensions.height
+        ),
       };
     });
   };
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
-      <Page ref={pageRef}>
-        <DraggableButton position={position} />
-      </Page>
+      <div
+        ref={pageRef}
+        style={{
+          position: 'relative',
+          width: '300px',
+          height: '300px',
+          border: '2px dashed black',
+          margin: '50px auto',
+        }}
+      >
+        <DraggableImage ref={imageRef} position={position} />
+      </div>
     </DndContext>
   );
 }
