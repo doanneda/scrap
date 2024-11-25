@@ -15,19 +15,17 @@ export default function DragAndDrop() {
 
       setBounds({
         top: 0,
-        left: 0,
+        left: -rect.width/2,
         bottom: rect.height,
-        right: rect.width,
+        right: rect.width/2, // Weird behavior with the x-coords but okay
       });
     }
-  }, []);
 
-  useEffect(() => {
     if (imageRef.current) {
       const { width, height } = imageRef.current.getBoundingClientRect();
       setImageDimensions({ width, height });
     }
-  }, [imageRef.current]);
+  }, []);
 
   const handleDragEnd = (event) => {
     const { delta } = event;
