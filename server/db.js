@@ -11,6 +11,6 @@ module.exports= () => {
     } catch (error) {
         console.log(error);
         console.log("Could not connect to database")
-        process.exit(1); // Exit the process if the connection fails
+        process.exit(1);
     }
 }

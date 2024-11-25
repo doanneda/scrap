@@ -16,21 +16,18 @@ router.post("/", async (req, res) => {
         const salt = await bcrypt.genSalt(Number(process.env.SALT));
         const hashPassword = await bcrypt.hash(req.body.password, salt);
 
-        // await line thing?
-
         const newUser = new User({
             username: req.body.username,
             email: req.body.email,
             password: hashPassword,
         });
-
-        // Save the new user to the database
+        
         await newUser.save();
 
         res.status(201).send({message: "User created successfully"})
 
     } catch (error) {
-        console.error(error); // Log the error for better debugging
+        console.error(error);
         res.status(500).send({message: "Internal Server Error"})
     }
 })
