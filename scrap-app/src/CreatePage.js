@@ -1,42 +1,39 @@
-import { Link } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import Storage from './Storage';
-
-// const fs = require('fs');
 
 export default function CreatePage() {
-  const [numImages, setNumImages] = useState(1); // Number of image slots (1 to 4)
-  const [images, setImages] = useState([]); // Store the uploaded images
-  const [description, setDescription] = useState(''); // Store the description
-  const [error, setError] = useState(''); // Error message for validation feedback
-  const name = "TEST3"
-  const color = "paleGreen"
+  const [numImages, setNumImages] = useState(1);
+  const [images, setImages] = useState([]);
+  const [description, setDescription] = useState('');
+  const [error, setError] = useState('');
+  const name = "TEST3";
+  const color = "paleGreen";
   const stickers = [
     {
       "stickerType": "emoji",
       "position": [
         { "x": 10, "y": 20 },
-        { "x": 30, "y": 40 }
-      ]
+        { "x": 30, "y": 40 },
+      ],
     },
-  ]
+  ];
 
   const handleNumImagesChange = (event) => {
     const newNumImages = parseInt(event.target.value, 10);
     setNumImages(newNumImages);
-    setImages(Array(newNumImages).fill(null)); // Reset images array to match the new count
-    setError(''); // Clear error when images changed
+    setImages(Array(newNumImages).fill(null));
+    setError('');
   };
 
   const handleFileChange = (index, event) => {
+    const file = event.target.files[0];
+    if (!file) return; // Prevent errors if no file is selected
     const updatedImages = [...images];
-    updatedImages[index] = event.target.files[0];
+    updatedImages[index] = file;
     setImages(updatedImages);
-    setError(''); 
+    setError('');
   };
 
-  // Removing images
   const handleRemove = (index) => {
     const updatedImages = [...images];
     updatedImages[index] = null;
@@ -49,60 +46,51 @@ export default function CreatePage() {
       setError(`Please upload all ${numImages} images before proceeding.`);
       return;
     }
-
-    // If all images are uploaded, proceed with upload logic
+  
     console.log('Selected Images:', images);
     console.log('Description:', description);
-    
-    // Convert images to binary
+  
+    // Convert images to Base64
     const imagePromises = images.map((file) => {
       return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            const base64Image = reader.result;  // This will be a base64-encoded string
-            resolve(base64Image);
-            // const arrayBuffer = reader.result;
-            // const buffer = Buffer.from(arrayBuffer);  // Convert ArrayBuffer to Buffer
-            // resolve(buffer);  // Resolve the promise with the buffer
-          };    
-          // reader.onloadend = () => resolve(reader.result);  // Convert to binary data
-          reader.onerror = reject;
-          reader.readAsArrayBuffer(file);  // Reads the file as binary
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64Image = reader.result; // Base64-encoded string
+          resolve(base64Image); // Resolve the promise with the Base64 string
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file); // Reads the file as Base64 data URL
       });
     });
-
-    // Upload the images to MongoDB
+  
     try {
-      const binaryImages = await Promise.all(imagePromises);
-      console.log(imagePromises)
-      console.log(binaryImages) 
-
+      const base64Images = await Promise.all(imagePromises);
+      console.log("Base64 Encoded Images:", base64Images);
+  
       const scrapData = {
         name,
-        binaryImages,
+        binaryImages: base64Images, // Send Base64 strings to the backend
         description,
         color,
-        stickers
+        stickers,
       };
-      console.log("Sending scrapdata to axios...")
-      // console.log("URL IS " + process.env.EXPO_PUBLIC_SERVER_URL); 
+  
+      console.log("Sending scrapData to axios...");
       const res = await axios.post("http://localhost:4000/scrap-pages/post", scrapData);
-      
-      // const res = await axios.post(`${process.env.EXPO_PUBLIC_SERVER_URL}/scrap-pages/post`, scrapData);
-      console.log("SUCCESSFUL AXIOS")
+  
+      console.log("Axios request successful");
       if (res.data.error) {
         console.error(res.data.error);
       } else {
-        const userId = res.data._id;
-        console.log("storing user id...")
+        // const userId = res.data._id;
+        console.log("Storing user ID...");
         // await Storage({ key: 'userId', value: userId, saveKey: true });
-        console.log("SUCCESFFUL STORAGE!")
-        // navigation.navigate('Home');
+        console.log("Successfully stored user ID!");
       }
     } catch (err) {
-      console.log(err.message);
+      console.error("Error during image upload:", err.message);
     }
-
+  
     // Reset state
     setError('');
     setImages(Array(numImages).fill(null));
@@ -110,30 +98,18 @@ export default function CreatePage() {
     alert('Upload successful!');
   };
 
-  useEffect(() => {
-    handleUpload();
-  }, []);
-
   return (
     <div>
-      {/* Dropdown for Number of Images */}
-      <div>
-        <label>
-          Select number of images:
-          <select
-            value={numImages}
-            onChange={handleNumImagesChange}
-          >
-            {[1, 2, 3, 4].map((num) => (
-              <option key={num} value={num}>
-                {num}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-
-      {/* Dynamic Grid */}
+      <label>
+        Select number of images:
+        <select value={numImages} onChange={handleNumImagesChange}>
+          {[1, 2, 3, 4].map((num) => (
+            <option key={num} value={num}>
+              {num}
+            </option>
+          ))}
+        </select>
+      </label>
       <div
         style={{
           display: 'grid',
@@ -197,57 +173,18 @@ export default function CreatePage() {
           </div>
         ))}
       </div>
-
-      {/* Text Input Section */}
-      <div style={{ marginTop: '20px' }}>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Enter a description here..."
-          style={{
-            width: '100%',
-            height: '80px',
-            padding: '10px',
-            fontSize: '14px',
-            border: '1px solid gray',
-            borderRadius: '5px',
-          }}
-        ></textarea>
-      </div>
-
-      {/* Error Message */}
-      {error && (
-        <div
-          style={{
-            marginTop: '10px',
-            color: 'red',
-            fontSize: '14px',
-          }}
-        >
-          {error}
-        </div>
-      )}
-
-      {/* Upload Button */}
-      <button
-        onClick={handleUpload}
+      <textarea
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        placeholder="Enter a description here..."
         style={{
+          width: '100%',
+          height: '80px',
           marginTop: '20px',
-          padding: '10px 20px',
-          backgroundColor: 'blue',
-          color: 'white',
-          border: 'none',
-          borderRadius: '5px',
-          cursor: 'pointer',
         }}
-      >
-        Upload
-      </button>
+      ></textarea>
+      {error && <div style={{ color: 'red' }}>{error}</div>}
+      <button onClick={handleUpload}>Upload</button>
     </div>
-    
-
-    // <Link to="login">
-    //     <button>Login</button>
-    // </Link>
   );
 }
