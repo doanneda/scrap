@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// Example of a model schema to validate and structure documents
 const scrapPage = new mongoose.Schema({
   name: { // user name or id associated with the scrap book page
     required: true,
@@ -14,6 +13,10 @@ const scrapPage = new mongoose.Schema({
   text: { // text for scrap book page
     required: false,
     type: String
+  },
+  color: {
+    required: false, // default can be white
+    type: String, // pastel colors 
   },
   stickers: { // store number, position, and type of stickers
     required: false, 
@@ -35,16 +38,10 @@ const scrapPage = new mongoose.Schema({
               }, 
             },
           ],
-          // validate: {
-          //   validator: function (positions) {
-          //     return positions.length === this.count;
-          //   },
-          //   message: 'Number of positions must match the count of stickers.',
-          // },
         },
       },
     ],
   }
 });
 
-module.exports = mongoose.model('Example', scrapPage);
+module.exports = mongoose.model('ScrapPage', scrapPage);

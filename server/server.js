@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-// Module Imports
+// module imports
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -8,10 +8,11 @@ const cors = require('cors');
 const uri = process.env.MONGODB_URI;
 const port = process.env.PORT;
 
-// Route Imports
-const exampleRouter = require('./routes/exampleRoute.js');
+// route imports
+// const exampleRouter = require('./routes/exampleRoute.js');
+const scrapPageRouter = require('./routes/scrapPageRoute.js')
 
-// Connect to the MongoDB database
+// connect to MongoDB 
 async function connectToDatabase() {
   try {
     await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -23,13 +24,17 @@ async function connectToDatabase() {
 
 connectToDatabase();
 
-// Start the Node Express server
+
+// start Node Express server
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// API Routes
-app.use('/test', exampleRouter);
+// API routes
+// app.use('/test', exampleRouter);
+
+// use the scrap page route
+app.use('/scrap-pages', scrapPageRouter);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
