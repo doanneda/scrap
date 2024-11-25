@@ -15,16 +15,9 @@ const createScrapPage = async (req, res) => {
 const getAllScrapPages = async (req, res) => {
   try {
     const scrapPages = await ScrapPage.find();
+    
 
-    // Convert binaryImages to Base64 for all documents
-    const formattedScrapPages = scrapPages.map((page) => ({
-      ...page._doc,
-      binaryImages: page.binaryImages.map((binaryImage) =>
-        `data:image/jpeg;base64,${binaryImage.toString('base64')}`
-      ),
-    }));
-
-    res.status(200).json(formattedScrapPages);
+    res.status(200).json(scrapPages);
   } catch (error) {
     console.error('Error fetching scrapbook pages:', error);
     res.status(500).json({ error: 'Failed to fetch scrapbook pages' });
