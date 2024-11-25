@@ -7,6 +7,12 @@ const userSchema = new mongoose.Schema({
     username: { type: String, require: true},
     email: { type: String, required: true},
     password: { type: String, required: true},
+    scrapPages: [ // establishes a one-to-many relationship between a user and their scrapbook pages
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'ScrapPage', // Reference the ScrapPage model
+        },
+      ],    
 });
 
 userSchema.methods.generateAuthToken = function () {

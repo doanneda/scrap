@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export default function CreatePage() {
@@ -6,7 +6,8 @@ export default function CreatePage() {
   const [images, setImages] = useState([]);
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
-  const name = "TEST3";
+  const [userId, setUserId] = useState(''); // State for storing user ID
+  const user = "TEST3";
   const color = "paleGreen";
   const stickers = [
     {
@@ -21,6 +22,27 @@ export default function CreatePage() {
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
   const MAX_WIDTH = 800;
   const MAX_HEIGHT = 800;
+
+  // Fetch user ID when component loads
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const token = localStorage.getItem('token'); // Assuming JWT is stored in localStorage
+        const res = await axios.get('http://localhost:4000/user/me', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUserId(res.data._id); // Set the user ID from the response
+      } catch (err) {
+        console.error('Error fetching user data:', err);
+        setError('Could not fetch user data. Please try again.');
+      }
+    };
+
+    fetchUserId();
+  }, []);
+
 
   const handleNumImagesChange = (event) => {
     const newNumImages = parseInt(event.target.value, 10);
@@ -89,6 +111,11 @@ export default function CreatePage() {
   };
 
   const handleUpload = async () => {
+    if (!userId) {
+      setError('User not authenticated.');
+      return;
+    }
+
     // Check if all required images are uploaded
     if (images.filter((image) => image !== null).length !== numImages) {
       setError(`Please upload all ${numImages} images before proceeding.`);
@@ -103,7 +130,7 @@ export default function CreatePage() {
 
       // Send to server
       const scrapData = {
-        name,
+        user: userId,
         binaryImages: resizedBase64Images,
         description,
         color,
