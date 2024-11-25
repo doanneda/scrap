@@ -1,16 +1,16 @@
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Storage from './Storage';
+
 // const fs = require('fs');
 
 export default function CreatePage() {
   const [numImages, setNumImages] = useState(1); // Number of image slots (1 to 4)
   const [images, setImages] = useState([]); // Store the uploaded images
-  // const [images, setImages] = useState(); // Store the uploaded images
-  // const [binaryImages, setBinaryImages] = useState([]) // stores converted binary images
   const [description, setDescription] = useState(''); // Store the description
   const [error, setError] = useState(''); // Error message for validation feedback
-  const name = "TEST"
+  const name = "TEST3"
   const color = "paleGreen"
   const stickers = [
     {
@@ -21,17 +21,6 @@ export default function CreatePage() {
       ]
     },
   ]
-
-  // const convertToBinary = (filePath) => {
-  //   try {
-  //     const binaryData = fs.readFileSync(filePath); // Reads the file as a Buffer
-  //     console.log('Binary Data:', binaryData);
-  //     return binaryData;
-  //   } catch (err) {
-  //     console.error('Error reading file:', err);
-  //   }
-  // };
-  
 
   const handleNumImagesChange = (event) => {
     const newNumImages = parseInt(event.target.value, 10);
@@ -64,40 +53,23 @@ export default function CreatePage() {
     // If all images are uploaded, proceed with upload logic
     console.log('Selected Images:', images);
     console.log('Description:', description);
-
-    // const binImage = convertToBinary('./path/to/image.jpg');
-    // const imagePromises = [];
-    // for (let i = 0; i < images.length; i++) {
-    //   const reader = new FileReader();
-    //   const file = images[i];
-    //   imagePromises.push(new Promise((resolve, reject) => {
-    //     reader.onloadend = () => resolve(reader.result);  // Convert to binary data
-    //     reader.onerror = reject;
-    //     reader.readAsArrayBuffer(file); // Reads the file as binary
-    //   }));
-    // }
+    
     // Convert images to binary
     const imagePromises = images.map((file) => {
       return new Promise((resolve, reject) => {
           const reader = new FileReader();
           reader.onloadend = () => {
-            const base64String = reader.result.split(',')[1]; // Extract base64 part (after "data:image/...;base64,")
-            resolve(base64String);
-          };
+            const base64Image = reader.result;  // This will be a base64-encoded string
+            resolve(base64Image);
+            // const arrayBuffer = reader.result;
+            // const buffer = Buffer.from(arrayBuffer);  // Convert ArrayBuffer to Buffer
+            // resolve(buffer);  // Resolve the promise with the buffer
+          };    
           // reader.onloadend = () => resolve(reader.result);  // Convert to binary data
           reader.onerror = reject;
           reader.readAsArrayBuffer(file);  // Reads the file as binary
       });
     });
-
-    // Once all images are converted to binary, store them in state
-    // Promise.all(imagePromises)
-    //   .then((binaryImages) => {
-    //     setImages(binaryImages);  // Store the binary data of images
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error converting images to binary", error);
-    //   });
 
     // Upload the images to MongoDB
     try {
@@ -123,7 +95,7 @@ export default function CreatePage() {
       } else {
         const userId = res.data._id;
         console.log("storing user id...")
-        await Storage({ key: 'userId', value: userId, saveKey: true });
+        // await Storage({ key: 'userId', value: userId, saveKey: true });
         console.log("SUCCESFFUL STORAGE!")
         // navigation.navigate('Home');
       }

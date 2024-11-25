@@ -5,14 +5,14 @@ const scrapPageSchema = new mongoose.Schema({
     required: true,
     type: String,
   },
-  images: { // images for scrap book page 
+  binaryImages: { // images for scrap book page 
     required: false,
-    type: [
-      {
-        data: { type: Buffer, required: true }, // Binary image data
-        contentType: { type: String, required: true }, // MIME type (e.g., 'image/png')
-      },
-    ],
+    type: [ Buffer ]
+      // {
+      //   data: { type: Buffer, required: true }, // Binary image data
+      //   contentType: { type: String, required: true }, // MIME type (e.g., 'image/png')
+      // },
+    // ],
   
     // required: false,
     // type: [Object], // Array of strings to store image URLs
