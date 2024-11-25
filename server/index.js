@@ -5,9 +5,9 @@ const cors = require("cors");
 const connection = require("./db");
 const userRoutes = require('./routes/users');
 const authRoutes = require('./routes/auth');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 
-const uri = "mongodb+srv://scrapUser:3G0hCeLWGXVr4JYE@scrap.hfxhm.mongodb.net/?retryWrites=true&w=majority&appName=scrap"
+// const uri = "mongodb+srv://scrapUser:3G0hCeLWGXVr4JYE@scrap.hfxhm.mongodb.net/?retryWrites=true&w=majority&appName=scrap"
 const port = process.env.PORT || 4000;
 
 // database connection
