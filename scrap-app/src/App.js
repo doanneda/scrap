@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import Login from './Login.js';
+import CreatePage from './CreatePage.js';
 import Profile from './Profile.js';
 
 import Feed from './Feed.js';
@@ -12,7 +13,7 @@ export default function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-            <Route path="/" element={<Feed />} />
+            <Route path="/" element={<CreatePage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
           </Routes>
