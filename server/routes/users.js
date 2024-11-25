@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { User, validate} = require("../models/User");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 router.post("/", async (req, res) => {
     try {
@@ -31,6 +32,20 @@ router.post("/", async (req, res) => {
         res.status(500).send({message: "Internal Server Error"})
     }
 })
+
+// Middleware to authenticate user using JWT
+const authenticateUser = (req, res, next) => {
+    const token = req.header("Authorization")?.replace("Bearer ", "");
+    if (!token) return res.status(401).send({ message: "Access Denied. No token provided." });
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET); // Verify the token
+        req.userId = decoded._id; // Attach the user ID to the request object
+        next();
+    } catch (err) {
+        res.status(400).send({ message: "Invalid Token" });
+    }
+};
 
 // GET: Retrieve Current User Details
 router.get("/me", authenticateUser, async (req, res) => {

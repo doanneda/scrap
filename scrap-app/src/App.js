@@ -6,8 +6,8 @@ import DragAndDrop from './DrapAndDrop.jsx'
 
 import { Route, Routes, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react"; // To manage login status within component
-import Signup from "./components/Signup-new";
-import Login from "./components/Login-new";
+import Signup from "./components/Signup-new/index.jsx";
+import Login from "./components/Login-new/index.jsx";
 
 function App() {
     const [user, setUser] = useState(() => {
