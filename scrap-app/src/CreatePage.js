@@ -24,24 +24,24 @@ export default function CreatePage() {
   const MAX_HEIGHT = 800;
 
   // Fetch user ID when component loads
-  useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const token = localStorage.getItem('token'); // Assuming JWT is stored in localStorage
-        const res = await axios.get('http://localhost:4000/user/me', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setUserId(res.data._id); // Set the user ID from the response
-      } catch (err) {
-        console.error('Error fetching user data:', err);
-        setError('Could not fetch user data. Please try again.');
-      }
-    };
+  // useEffect(() => {
+  //   const fetchUserId = async () => {
+  //     try {
+  //       const token = localStorage.getItem('token'); // Assuming JWT is stored in localStorage
+  //       const res = await axios.get('http://localhost:4000/user/me', {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+  //       setUserId(res.data._id); // Set the user ID from the response
+  //     } catch (err) {
+  //       console.error('Error fetching user data:', err);
+  //       setError('Could not fetch user data. Please try again.');
+  //     }
+  //   };
 
-    fetchUserId();
-  }, []);
+  //   fetchUserId();
+  // }, []);
 
 
   const handleNumImagesChange = (event) => {
