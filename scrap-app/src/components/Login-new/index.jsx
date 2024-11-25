@@ -5,7 +5,7 @@ import styles from "./styles.module.css";
 import { Link } from "react-router-dom";
 
 const Login = () => {
-    const [data, setData] = useState({ email: "", password: "" });
+    const [data, setData] = useState({ username: "", password: "" });
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
