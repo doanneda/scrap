@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -6,8 +6,9 @@ export default function CreatePage() {
   const [numImages, setNumImages] = useState(1);
   const [images, setImages] = useState([]);
   const [description, setDescription] = useState('');
+  const [tagInput, setTagInput] = useState('');
+  const [tags, setTags] = useState([]);
   const [error, setError] = useState('');
-  const name = "TEST3";
   const color = "paleGreen";
   const stickers = [
     {
@@ -18,9 +19,9 @@ export default function CreatePage() {
       ]
     },
   ];
-  const tags = [
-    "red", "orange", "slay"
-  ]
+  // const tags = [
+  //   "red", "orange", "blue"
+  // ]
   const navigate = useNavigate();
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -93,42 +94,6 @@ export default function CreatePage() {
     });
   };
 
-  // const handleUpload = async () => {
-  //   // Check if all required images are uploaded
-  //   if (images.filter((image) => image !== null).length !== numImages) {
-  //     setError(`Please upload all ${numImages} images before proceeding.`);
-  //     return;
-  //   }
-
-  //   // Resize images and convert to Base64
-  //   const imagePromises = images.map((file) => resizeImage(file));
-
-  //   try {
-  //     const resizedBase64Images = await Promise.all(imagePromises);
-
-  //     // Send to server
-  //     const scrapData = {
-  //       name,
-  //       binaryImages: resizedBase64Images,
-  //       description,
-  //       color,
-  //       stickers
-  //     };
-
-  //     const res = await axios.post(`${process.env.REACT_APP_SERVER_URL}/scrap-pages/add-page`, scrapData);
-  //     console.log('Upload Successful', res.data);
-
-  //     // Reset state after successful upload
-  //     setError('');
-  //     setImages(Array(numImages).fill(null));
-  //     setDescription('');
-  //     alert('Upload successful!');
-  //   } catch (err) {
-  //     console.error('Upload error:', err.message);
-  //     setError('There was an error uploading the images.');
-  //   }
-  // };
-
   const handleUpload = async () => {
     // Check if all required images are uploaded
     if (images.filter((image) => image !== null).length !== numImages) {
@@ -148,7 +113,16 @@ export default function CreatePage() {
         setError('You must be logged in to upload a scrapbook page.');
         return;
       }
-  
+
+      // get the timestamp
+      const now = new Date();
+      // const formatted = `${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()} ` +
+      //                   `${now.getHours()}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`;
+      // console.log(formatted)
+      // console.log("formatted ", formatted)
+      // setTimeStamp(formatted);
+      // console.log("timeStamp ", timeStamp)
+
       // Send to server
       const scrapData = {
         // name,
@@ -156,11 +130,13 @@ export default function CreatePage() {
         description,
         color,
         stickers,
-        tags
+        tags,
+        timestamp: now,
       };
   
       const res = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/scrap-pages/post`,
+        // `${process.env.REACT_APP_SERVER_URL}/scrap-pages/post`,
+        `http://localhost:4000/scrap-pages/post`,
         scrapData,
         {
           headers: {
@@ -183,6 +159,20 @@ export default function CreatePage() {
 
     // route to the feed page
     navigate('/feed');
+  };
+
+  // Handle change in the input field
+  const handleTagInputChange = (e) => {
+    setTagInput(e.target.value);
+  };
+
+  // Handle adding the tag
+  const handleAddTag = () => {
+    // Check if the input is not empty and is not already in the tags array
+    if (tagInput && !tags.includes(tagInput)) {
+      setTags([...tags, tagInput]); // Add the new tag to the array
+      setTagInput(''); // Clear the input field
+    }
   };
   
 
@@ -267,7 +257,7 @@ export default function CreatePage() {
         ))}
       </div>
 
-      {/* Text Input Section */}
+      {/* Text Input Section For Description */}
       <div style={{ marginTop: '20px' }}>
         <textarea
           value={description}
@@ -283,6 +273,50 @@ export default function CreatePage() {
           }}
         ></textarea>
       </div>
+
+      <div style={{ marginTop: '20px' }}>
+      {/* Text input for entering a tag */}
+      <input
+        type="text"
+        value={tagInput}
+        onChange={handleTagInputChange}
+        placeholder="Enter a tag..."
+        style={{
+          padding: '8px',
+          fontSize: '14px',
+          border: '1px solid gray',
+          borderRadius: '5px',
+          marginRight: '10px',
+        }}
+      />
+
+      {/* Button to add the tag */}
+      <button
+        onClick={handleAddTag}
+        style={{
+          padding: '8px 16px',
+          backgroundColor: '#007bff',
+          color: 'white',
+          border: 'none',
+          borderRadius: '5px',
+          cursor: 'pointer',
+        }}
+      >
+        Add Tag
+      </button>
+
+      {/* Display the current tags */}
+      <div style={{ marginTop: '10px' }}>
+        <h4>Tags:</h4>
+        <ul>
+          {tags.map((tag, index) => (
+            <li key={index} style={{ display: 'inline-block', marginRight: '10px', padding: '5px', backgroundColor: '#f0f0f0', borderRadius: '5px' }}>
+              {tag}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
 
       {/* Error Message */}
       {error && (
