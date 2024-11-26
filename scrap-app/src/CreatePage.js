@@ -160,7 +160,7 @@ export default function CreatePage() {
       };
   
       const res = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/scrap-pages/post`,
+        "http://localhost:4000/scrap-pages/post",
         scrapData,
         {
           headers: {
