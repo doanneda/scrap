@@ -1,23 +1,43 @@
 import logo from './logo.svg';
 import './App.css';
-import Login from './Login.js';
 import CreatePage from './CreatePage.js';
 import Profile from './Profile.js';
 import Feed from './Feed.js';
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import DragAndDrop from './DrapAndDrop.jsx';
 
+import { Route, Routes, Navigate } from "react-router-dom";
+import { useState, useEffect } from "react"; // To manage login status within component
+import Signup from "./components/Signup-new";
+import Login from "./components/Login-new";
 
-export default function App() {
-  return (
-    <div className="App">
-      <BrowserRouter>
+function App() {
+    const [user, setUser] = useState(() => {
+        // Initialize user state from localStorage
+        const token = localStorage.getItem("token");
+        return token ? true : false; // Or decode and validate the token if necessary
+    });
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            setUser(true); // Optionally, validate the token here
+        } else {
+            setUser(false);
+        }
+    }, []);
+
+    return (
         <Routes>
-            <Route path="/" element={<Feed />} />
+            {/* If the user is logged in, show Main, otherwise navigate to /login */}
+            <Route path="/" element={user ? <CreatePage /> : <Navigate replace to="/login" />} />
+            <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/createPage" element={<CreatePage />} />
-          </Routes>
-      </BrowserRouter>
-    </div>
-  );
+            <Route path="/profile" element={user ? <Profile /> : <Navigate replace to="/login" />} />
+            <Route path="/dnd" element={user ? <DragAndDrop /> : <Navigate replace to="/login" />} />
+            <Route path="/feed" element={<Feed />} />
+        </Routes>
+    );
+
 }
+
+export default App;

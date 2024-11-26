@@ -10,6 +10,7 @@ export default function Profile(){
         <div className="profile-container">
         {/* Profile Header */}
         <header className="profile-header">
+            {/* Placeholder pfp, will be replaced with emoji of user's choice*/}
           <div className="profile-picture">🦈</div>
           <div className="profile-info">
             <h1 className="profile-name">{userName}</h1>
@@ -21,6 +22,7 @@ export default function Profile(){
         <div className="scrapbook-grid">
           {placeholderPages.map((page) => (
             <div key={page} className="scrapbook-item">
+                {/* Placeholder image, will be replaced with user's scrapbook pages (image thumbnails + link to the actual page) */}
               <div className="placeholder-image">📄</div>
             </div>
           ))}
