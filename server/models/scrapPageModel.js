@@ -1,5 +1,17 @@
 const mongoose = require('mongoose');
 
+
+const stickerSchema = new mongoose.Schema({
+  stickerType: {
+    type: String,
+    required: true,
+  },
+  position: {
+    x: { type: Number, required: true },
+    y: { type: Number, required: true },
+  },
+});
+
 const scrapPageSchema = new mongoose.Schema({
   name: { // user name or id associated with the scrap book page
     required: true,
@@ -27,30 +39,8 @@ const scrapPageSchema = new mongoose.Schema({
     type: String, // pastel colors 
   },
   stickers: {
-    required: false,
-    type: [
-      {
-        stickerType: { 
-          type: String, 
-          required: true, 
-          enum: [
-            'frog', 'lotus', 'clothespin', 'star', 'dipper', 'heart', 
-            'flower', 'humanheart', 'moon', 'leaf', 'orange', 'virus', 
-            'wing', 'lick', 'fence'
-          ],
-        },
-        position: {
-          x: {
-            type: Number, 
-            required: true,
-          },
-          y: {
-            type: Number, 
-            required: true,
-          },
-        },
-      },
-    ],
+    type: [stickerSchema], // Embedded array of stickers
+    default: [], // Default to an empty array if no stickers are saved
   },
   
 });
