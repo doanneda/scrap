@@ -19,14 +19,11 @@ export default function CreatePage() {
       ]
     },
   ];
-  // const tags = [
-  //   "red", "orange", "blue"
-  // ]
   const navigate = useNavigate();
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-  const MAX_WIDTH = 800;
-  const MAX_HEIGHT = 800;
+  const MAX_WIDTH = 700; // decreased this from 800 
+  const MAX_HEIGHT = 700; // decreased this from 800
 
   const handleNumImagesChange = (event) => {
     const newNumImages = parseInt(event.target.value, 10);
@@ -53,21 +50,21 @@ export default function CreatePage() {
     updatedImages[index] = null;
     setImages(updatedImages);
   };
-
   const resizeImage = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onloadend = () => {
         const img = new Image();
         img.src = reader.result;
-
+  
         img.onload = () => {
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d');
-
+  
           let width = img.width;
           let height = img.height;
-
+  
+          // Resize image more aggressively if needed
           if (width > height) {
             if (width > MAX_WIDTH) {
               height *= MAX_WIDTH / width;
@@ -79,20 +76,22 @@ export default function CreatePage() {
               height = MAX_HEIGHT;
             }
           }
-
+  
           canvas.width = width;
           canvas.height = height;
           ctx.drawImage(img, 0, 0, width, height);
 
-          resolve(canvas.toDataURL('image/jpeg')); // Base64 encoded image
+          // can change this for better quality but smaller images size
+          resolve(canvas.toDataURL('image/jpeg', 0.25)); // 25% quality for more compression
         };
-
+  
         img.onerror = reject;
       };
       reader.onerror = reject;
-      reader.readAsDataURL(file); // Reads the file as base64
+      reader.readAsDataURL(file);
     });
   };
+  
 
   const handleUpload = async () => {
     // Check if all required images are uploaded
@@ -114,18 +113,10 @@ export default function CreatePage() {
         return;
       }
 
-      // get the timestamp
       const now = new Date();
-      // const formatted = `${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()} ` +
-      //                   `${now.getHours()}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`;
-      // console.log(formatted)
-      // console.log("formatted ", formatted)
-      // setTimeStamp(formatted);
-      // console.log("timeStamp ", timeStamp)
 
       // Send to server
       const scrapData = {
-        // name,
         binaryImages: resizedBase64Images,
         description,
         color,
