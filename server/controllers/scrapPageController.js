@@ -26,7 +26,7 @@ const createScrapPage = async (req, res) => {
 
 const getAllScrapPages = async (req, res) => {
   try {
-    const scrapPages = await ScrapPage.find();
+    const scrapPages = await ScrapPage.find().sort({ timestamp: -1 }); // Sort by timestamp in descending order
     
 
     res.status(200).json(scrapPages);
@@ -48,7 +48,7 @@ const getAllScrapPagesByTag = async (req, res) => {
     // Search for scrapbook pages that contain the tag in the 'tags' array
     const scrapPages = await ScrapPage.find({
       tags: { $in: [tag] }  // $in checks if the 'tag' exists in the 'tags' array
-    });
+    }).sort({ timestamp: -1 }); // Sort by timestamp in descending order
 
     // If no scrap pages found
     if (scrapPages.length === 0) {

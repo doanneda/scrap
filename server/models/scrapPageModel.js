@@ -52,7 +52,7 @@ const scrapPageSchema = new mongoose.Schema({
   },
   timestamp: {
     required: false, 
-    type: String
+    type: Date
   }
 });
 
