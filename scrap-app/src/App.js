@@ -2,7 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 import CreatePage from './CreatePage.js';
 import Profile from './Profile.js';
-import DragAndDrop from './DrapAndDrop.jsx'
+import Feed from './Feed.js';
+import DragAndDrop from './DrapAndDrop.jsx';
 
 import { Route, Routes, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react"; // To manage login status within component
@@ -33,6 +34,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={user ? <Profile /> : <Navigate replace to="/login" />} />
             <Route path="/dnd" element={user ? <DragAndDrop /> : <Navigate replace to="/login" />} />
+            <Route path="/feed" element={<Feed />} />
         </Routes>
     );
 

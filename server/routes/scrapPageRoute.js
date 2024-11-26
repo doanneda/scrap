@@ -20,6 +20,8 @@ scrapPageRouter.get('/user-pages', auth, async (req, res) => {
   }
 });
 
+scrapPageRouter.get('/', scrapPageController.getAllScrapPages);
+
 // new added stuff
 // scrapPageRouter.get('/user/:id', userController.getUserWithPages); // Get user with their scrap pages
 // scrapPageRouter.post('/add-page', userController.addScrapPageToUser); // Create a scrap page for a user
