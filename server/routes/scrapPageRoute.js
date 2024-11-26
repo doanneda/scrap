@@ -6,5 +6,6 @@ const scrapPageController = require('../controllers/scrapPageController'); // ge
 
 scrapPageRouter.post('/post', scrapPageController.createScrapPage);
 scrapPageRouter.get('/', scrapPageController.getAllScrapPages);
+scrapPageRouter.put('/save-stickers', scrapPageController.saveStickers);
 
 module.exports = scrapPageRouter;

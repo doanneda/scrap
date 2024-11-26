@@ -24,7 +24,30 @@ const getAllScrapPages = async (req, res) => {
   }
 }
 
+const saveStickers = async (req, res) => {
+  const { pageId, stickers } = req.body; // Expect pageId and stickers in the request body
+
+  try {
+    const scrapPage = await ScrapPage.findById(pageId);
+
+    if (!scrapPage) {
+      return res.status(404).json({ error: 'ScrapPage not found' });
+    }
+
+    scrapPage.stickers = stickers;
+
+    const updatedPage = await scrapPage.save();
+
+    res.status(200).json(updatedPage);
+  } catch (error) {
+    console.error('Error saving stickers:', error);
+    res.status(500).json({ error: 'Failed to save stickers' });
+  }
+};
+
+
 module.exports = {
     createScrapPage,
     getAllScrapPages,
+    saveStickers,
 };

@@ -26,30 +26,33 @@ const scrapPageSchema = new mongoose.Schema({
     required: false, // default can be white
     type: String, // pastel colors 
   },
-  stickers: { // store number, position, and type of stickers
-    required: false, 
+  stickers: {
+    required: false,
     type: [
       {
         stickerType: { 
-          type: String, required: true 
-        }, // sticker type (ex. 'emoji', 'star', etc.)
-        position: {
-          type: [
-            {
-              x: { // x position in percentage
-                type: Number, 
-                required: true 
-              }, 
-              y: { // y position in percentage
-                type: Number, 
-                required: true 
-              }, 
-            },
+          type: String, 
+          required: true, 
+          enum: [
+            'frog', 'lotus', 'clothespin', 'star', 'dipper', 'heart', 
+            'flower', 'humanheart', 'moon', 'leaf', 'orange', 'virus', 
+            'wing', 'lick', 'fence'
           ],
+        },
+        position: {
+          x: {
+            type: Number, 
+            required: true,
+          },
+          y: {
+            type: Number, 
+            required: true,
+          },
         },
       },
     ],
-  }
+  },
+  
 });
 
 module.exports = mongoose.model('ScrapPage', scrapPageSchema);
