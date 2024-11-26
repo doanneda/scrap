@@ -25,26 +25,25 @@ export default function DragAndDrop() {
   const pageRef = useRef(null);
 
   const [stickers, setStickers] = useState([
-    { id: 'frog', x: 400, y: 0, imageSource: Frog, size: { width: 80, height: 80 } },
-    { id: 'lotus', x: 550, y: 0, imageSource: Lotus, size: { width: 100, height: 90 } },
-    { id: 'clothespin', x: 700, y: 0, imageSource: Clothespin, size: { width: 50, height: 100 } },
-    { id: 'dipper', x: 400, y: 150, imageSource: Dipper, size: { width: 140, height: 90 } },
-    { id: 'flower', x: 550, y: 150, imageSource: Flower, size: { width: 80, height: 80 } },
-    { id: 'heart', x: 700, y: 150, imageSource: Heart, size: { width: 80, height: 80 } },
-    { id: 'humanheart', x: 400, y: 300, imageSource: HumanHeart, size: { width: 90, height: 120 } },
-    { id: 'leaf', x: 550, y: 300, imageSource: Leaf, size: { width: 90, height: 100 } },
-    { id: 'moon', x: 700, y: 300, imageSource: Moon, size: { width: 50, height: 80 } },
-    { id: 'orange', x: 400, y: 450, imageSource: Orange, size: { width: 80, height: 90 } },
-    { id: 'star', x: 550, y: 450, imageSource: Star, size: { width: 90, height: 90 } },
-    { id: 'virus', x: 700, y: 450, imageSource: Virus, size: { width: 90, height: 90 } },
-    { id: 'wing', x: 400, y: 600, imageSource: Wing, size: { width: 80, height: 90 } },
-    { id: 'lick', x: 550, y: 550, imageSource: Lick, size: { width: 210, height: 80 } },
-    { id: 'fence', x: 550, y: 650, imageSource: Fence, size: { width: 210, height: 60 } },
+    { id: 'frog', x: 400, y: 0, imageSource: Frog, stickerType: 'frog', size: { width: 80, height: 80 } },
+    { id: 'lotus', x: 550, y: 0, imageSource: Lotus, stickerType: 'lotus', size: { width: 100, height: 90 } },
+    { id: 'clothespin', x: 700, y: 0, imageSource: Clothespin, stickerType: 'clothespin', size: { width: 50, height: 100 } },
+    { id: 'dipper', x: 400, y: 150, imageSource: Dipper, stickerType: 'dipper', size: { width: 140, height: 90 } },
+    { id: 'flower', x: 550, y: 150, imageSource: Flower, stickerType: 'flower', size: { width: 80, height: 80 } },
+    { id: 'heart', x: 700, y: 150, imageSource: Heart, stickerType: 'heart', size: { width: 80, height: 80 } },
+    { id: 'humanheart', x: 400, y: 300, imageSource: HumanHeart, stickerType: 'humanheart', size: { width: 90, height: 120 } },
+    { id: 'leaf', x: 550, y: 300, imageSource: Leaf, stickerType: 'leaf', size: { width: 90, height: 100 } },
+    { id: 'moon', x: 700, y: 300, imageSource: Moon, stickerType: 'moon', size: { width: 50, height: 80 } },
+    { id: 'orange', x: 400, y: 450, imageSource: Orange, stickerType: 'orange', size: { width: 80, height: 90 } },
+    { id: 'star', x: 550, y: 450, imageSource: Star, stickerType: 'star', size: { width: 90, height: 90 } },
+    { id: 'virus', x: 700, y: 450, imageSource: Virus, stickerType: 'virus', size: { width: 90, height: 90 } },
+    { id: 'wing', x: 400, y: 600, imageSource: Wing, stickerType: 'wing', size: { width: 80, height: 90 } },
+    { id: 'lick', x: 550, y: 550, imageSource: Lick, stickerType: 'lick', size: { width: 210, height: 80 } },
+    { id: 'fence', x: 550, y: 650, imageSource: Fence, stickerType: 'fence', size: { width: 210, height: 60 } },
   ]);
   
 
   const [bounds, setBounds] = useState({ top: 0, left: 0, bottom: 0, right: 0 });
-  const [scrapData, setScrapData] = useState([]);
   const [error, setError] = useState('');
   const [images, setImages] = useState([]);
 
@@ -74,8 +73,6 @@ export default function DragAndDrop() {
     fetchScrapData();
   }, []);
   
-  
-
 
   useEffect(() => {
     if (pageRef.current) {
@@ -117,6 +114,23 @@ export default function DragAndDrop() {
     );
   };
 
+
+  const handleSave = async () => {
+    const preparedData = stickers.map((sticker) => ({
+      stickerType: sticker.stickerType,
+      position: { x: sticker.x, y: sticker.y },
+    }));
+
+    try {
+      await axios.post('http://localhost:4000/save-stickers', { stickers: preparedData });
+      alert('Stickers saved successfully!');
+    } catch (err) {
+      console.error('Error saving stickers:', err);
+      alert('Failed to save stickers.');
+    }
+  };
+
+
   return (
     <DndContext onDragEnd={handleDragEnd}>
         <Page ref={pageRef} size={750} color="#ece7f1">
@@ -144,6 +158,9 @@ export default function DragAndDrop() {
             />
           ))}
         </Page>
+        <button onClick={handleSave} style={{ marginTop: '20px' }}>
+          Save Stickers
+        </button>
     </DndContext>
   );
   
