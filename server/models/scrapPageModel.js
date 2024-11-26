@@ -5,14 +5,14 @@ const scrapPageSchema = new mongoose.Schema({
   //   required: true,
   //   type: String,
   // },
-  user: {
-    type: mongoose.Schema.Types.ObjectId, // Reference the User model
-    ref: 'User',
+  user: { // Reference to the User model
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user', // Match the name of the User model
     required: true,
   },
   binaryImages: { // images for scrap book page 
     required: false,
-    type: [ Buffer ]
+    type: [ String ]
   },
   description: { // text for scrap book page
     required: false,

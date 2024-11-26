@@ -30,7 +30,6 @@ const addScrapPageToUser = async (req, res) => {
         });
 
         await newScrapPage.save();
-
         // Add scrap page to user's scrapPages array
         const user = await User.findById(userId);
         user.scrapPages.push(newScrapPage._id);
