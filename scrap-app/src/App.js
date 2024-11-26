@@ -3,6 +3,8 @@ import './App.css';
 import Login from './Login.js';
 import CreatePage from './CreatePage.js';
 import Profile from './Profile.js';
+import DragAndDrop from './DrapAndDrop.jsx'
+
 import Feed from './Feed.js';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
@@ -16,6 +18,7 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/createPage" element={<CreatePage />} />
+            <Route path="/dnd" element={<DragAndDrop />} />
           </Routes>
       </BrowserRouter>
     </div>
