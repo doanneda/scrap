@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function CreatePage() {
   const [numImages, setNumImages] = useState(1);
@@ -17,6 +18,10 @@ export default function CreatePage() {
       ]
     },
   ];
+  const tags = [
+    "red", "orange", "slay"
+  ]
+  const navigate = useNavigate();
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
   const MAX_WIDTH = 800;
@@ -151,6 +156,7 @@ export default function CreatePage() {
         description,
         color,
         stickers,
+        tags
       };
   
       const res = await axios.post(
@@ -174,6 +180,9 @@ export default function CreatePage() {
       console.error('Upload error:', err.message);
       setError('There was an error uploading the images.');
     }
+
+    // route to the feed page
+    navigate('/feed');
   };
   
 

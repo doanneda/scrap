@@ -45,6 +45,10 @@ const scrapPageSchema = new mongoose.Schema({
         },
       },
     ],
+  },
+  tags: {
+    required: false,
+    type: [ String ]
   }
 });
 
