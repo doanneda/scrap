@@ -42,6 +42,7 @@ export default function DragAndDrop() {
     { id: 'fence', x: 550, y: 650, imageSource: Fence, stickerType: 'fence', size: { width: 210, height: 60 } },
   ]);
   
+  
 
   const [bounds, setBounds] = useState({ top: 0, left: 0, bottom: 0, right: 0 });
   const [error, setError] = useState('');
@@ -80,9 +81,9 @@ export default function DragAndDrop() {
 
       setBounds({
         top: 0,
-        left: -rect.width / 2,
+        left: 0,
         bottom: rect.height,
-        right: rect.width / 2,
+        right: rect.width,
       });
     }
   }, []);
