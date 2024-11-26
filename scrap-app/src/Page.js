@@ -8,7 +8,7 @@ const Page = forwardRef(({ size, children }, ref) => {
         position: 'relative',
         width: `${size}px`,
         height: `${size}px`,
-        border: '2px dashed black',
+        border: '2px solid black',
         margin: '50px auto',
         overflow: 'visible',
       }}
