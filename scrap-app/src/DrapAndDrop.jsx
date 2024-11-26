@@ -120,16 +120,19 @@ export default function DragAndDrop() {
       stickerType: sticker.stickerType,
       position: { x: sticker.x, y: sticker.y },
     }));
-
+  
     try {
-      await axios.post('http://localhost:4000/save-stickers', { stickers: preparedData });
+      await axios.put('http://localhost:4000/scrap-pages/save-stickers', {
+        pageId: 'testPageID', // Replace with actual page ID
+        stickers: preparedData,
+      });
       alert('Stickers saved successfully!');
     } catch (err) {
       console.error('Error saving stickers:', err);
       alert('Failed to save stickers.');
     }
   };
-
+  
 
   return (
     <DndContext onDragEnd={handleDragEnd}>

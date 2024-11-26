@@ -57,7 +57,7 @@ export default function Feed() {
                     //     return base64String; // The result should include 'data:image/...'
                     // };
                     
-                    console.log(image)
+                    //console.log(image);
                     // const imageSrc = bufferToBase64(image);
                       
                     return (
