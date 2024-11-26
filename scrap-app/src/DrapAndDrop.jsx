@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import axios from 'axios';
 import DraggableImage from './DraggableImage';
 import Page from './Page';
 import { DndContext } from '@dnd-kit/core';
@@ -23,11 +24,7 @@ import Fence from './assets/stickers/fence.png';
 export default function DragAndDrop() {
   const pageRef = useRef(null);
 
-  const [items, setItems] = useState([
-    { id: 'image1', x: -650, y: 0, imageSource: 'https://media.discordapp.net/attachments/1297781942590378108/1309054813966958663/IMG_2665.jpg?ex=67461e8c&is=6744cd0c&hm=d5f0cc84085405dbd0d93bcf06de9a563d937450185e9cf22f8fb9f7fe65f3fc&=&format=webp&width=1248&height=936', size: { width: 220, height: 160 } },
-    { id: 'image2', x: -650, y: 180, imageSource: 'https://media.discordapp.net/attachments/1297781942590378108/1301389329817403493/IMG_4203.jpg?ex=6745eb02&is=67449982&hm=5b979ddda8b16fd29cd520d5517f4f70937bcfc8ff6ef81d58a4859587a72187&=&format=webp&width=1248&height=936', size: { width: 220, height: 160 } },
-    { id: 'image3', x: -650, y: 360, imageSource: 'https://media.discordapp.net/attachments/1297781942590378108/1301389323136139316/IMG_4216.jpg?ex=6745eb01&is=67449981&hm=0ad9bb43552bf79000e4cc6b7617f4f2eb5efb60bde25463290dc740d5dd98cb&=&format=webp&width=1248&height=936', size: { width: 220, height: 160 } },
-    { id: 'image4', x: -650, y: 540, imageSource: 'https://media.discordapp.net/attachments/1297781942590378108/1300694734745894962/IMG_4197.jpg?ex=6746071e&is=6744b59e&hm=1867ef71732da34c8e6afc380e8a11d4a30e5ad2180e91523877a7b1ec2c345e&=&format=webp&width=1248&height=936', size: { width: 220, height: 160 } },
+  const [stickers, setStickers] = useState([
     { id: 'frog', x: 400, y: 0, imageSource: Frog, size: { width: 80, height: 80 } },
     { id: 'lotus', x: 550, y: 0, imageSource: Lotus, size: { width: 100, height: 90 } },
     { id: 'clothespin', x: 700, y: 0, imageSource: Clothespin, size: { width: 50, height: 100 } },
@@ -47,6 +44,38 @@ export default function DragAndDrop() {
   
 
   const [bounds, setBounds] = useState({ top: 0, left: 0, bottom: 0, right: 0 });
+  const [scrapData, setScrapData] = useState([]);
+  const [error, setError] = useState('');
+  const [images, setImages] = useState([]);
+
+
+  useEffect(() => {
+    const fetchScrapData = async () => {
+      try {
+        const res = await axios.get('http://localhost:4000/scrap-pages');
+        
+        const pageData = res.data[12]; // Change this index depending on what the current page is
+        
+        const imagesArray = pageData.binaryImages.map((image, index) => ({
+          id: `image-${index}`,
+          x: -600, 
+          y: index*200,
+          size: { width: 200, height: 200 },
+          binaryImages: image,
+        }));
+        
+        setImages(imagesArray);
+      } catch (err) {
+        console.error('Error fetching scrapbook data:', err);
+        setError('Failed to load scrapbook data.');
+      }
+    };
+  
+    fetchScrapData();
+  }, []);
+  
+  
+
 
   useEffect(() => {
     if (pageRef.current) {
@@ -64,8 +93,8 @@ export default function DragAndDrop() {
   const handleDragEnd = (event) => {
     const { delta, active } = event;
 
-    setItems((prevItems) =>
-      prevItems.map((item) =>
+    setStickers((prevStickers) =>
+      prevStickers.map((item) =>
         item.id === active.id
           ? {
               ...item,
@@ -75,12 +104,37 @@ export default function DragAndDrop() {
           : item
       )
     );
+    setImages((prevImages) =>
+      prevImages.map((image) =>
+        image.id === active.id
+          ? {
+              ...image,
+              x: Math.min(Math.max(image.x + delta.x, bounds.left), bounds.right - image.size.width),
+              y: Math.min(Math.max(image.y + delta.y, bounds.top), bounds.bottom - image.size.height),
+            }
+          : image
+      )
+    );
   };
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
         <Page ref={pageRef} size={750} color="#ece7f1">
-          {items.map((item) => (
+        {error && <p>{error}</p>}
+        {images.length > 0 ? (
+          images.map((image, index) => (
+            <DraggableImage
+              key={index}
+              id={image.id}
+              position={{ x: image.x, y: image.y }}
+              size={image.size}
+              imageSource={image.binaryImages}
+            />
+          ))
+        ) : (
+          <p>Loading images...</p>
+        )}
+          {stickers.map((item) => (
             <DraggableImage
               key={item.id}
               id={item.id}
