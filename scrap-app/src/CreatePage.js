@@ -23,25 +23,37 @@ export default function CreatePage() {
   const MAX_WIDTH = 800;
   const MAX_HEIGHT = 800;
 
-  // Fetch user ID when component loads
-  useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const token = localStorage.getItem('token'); // Assuming JWT is stored in localStorage
-        const res = await axios.get('http://localhost:4000/user/me', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setUserId(res.data._id); // Set the user ID from the response
-      } catch (err) {
-        console.error('Error fetching user data:', err);
-        setError('Could not fetch user data. Please try again.');
-      }
-    };
+  // useEffect(() => {
+  //   // Fetch data from the backend
+  //   const fetchData = async () => {
+      // try {
+      //   const user = await axios.get("http://localhost:4000/get-user/get", { timeout: 20000 });
+      //   setUserId(user);
+      //   console.log("success getting user")
+      //   console.log(userId)
+      //   // return randomPocketPrompt.data;
+      // } catch (err) {
+      //   console.log(err);
+      // }
+      // return 'True';
+  //   };
 
-    fetchUserId();
-  }, []);
+  //   fetchData();
+  // }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const user = await axios.get("http://localhost:4000/get-user/get", { timeout: 20000 });
+      setUserId(user);
+      console.log("success getting user")
+      console.log(userId)
+      // return randomPocketPrompt.data;
+    } catch (err) {
+      console.log(err);
+    }
+    return 'True';
+  };
+
 
 
   const handleNumImagesChange = (event) => {
@@ -112,11 +124,6 @@ export default function CreatePage() {
   
 
   const handleUpload = async () => {
-    if (!userId) {
-      setError('User not authenticated.');
-      return;
-    }
-
     // Check if all required images are uploaded
     if (images.filter((image) => image !== null).length !== numImages) {
       setError(`Please upload all ${numImages} images before proceeding.`);
@@ -128,17 +135,25 @@ export default function CreatePage() {
 
     try { // comment
       const resizedBase64Images = await Promise.all(imagePromises);
+      console.log("Retrieving...")
+
+      const user = await axios.get("http://localhost:4000/get-user/get");
+      console.log("success getting user")
+
+      console.log(user)
+      setUserId(user);
+      console.log(userId)
 
       // Send to server
       const scrapData = {
-        user: userId,
+        user: user,
         binaryImages: resizedBase64Images,
         description,
         color,
         stickers
       };
 
-      const res = await axios.post('http://localhost:4000/scrap-pages/post', scrapData);
+      const res = await axios.post("http://localhost:4000/scrap-pages/post", scrapData);
       console.log('Upload Successful', res.data);
 
       // Reset state after successful upload

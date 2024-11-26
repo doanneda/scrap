@@ -2,6 +2,8 @@ const router = require("express").Router();
 const { User, validate} = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const userController = require('../controllers/userFetchController'); // get the controller 
+
 
 router.post("/", async (req, res) => {
     try {
@@ -33,32 +35,30 @@ router.post("/", async (req, res) => {
     }
 })
 
-// // Middleware to authenticate user using JWT
-// const authenticateUser = (req, res, next) => {
-//     const token = req.header("Authorization")?.replace("Bearer ", "");
-//     if (!token) return res.status(401).send({ message: "Access Denied. No token provided." });
-
+// router.post("/get", async (req, res) => {
 //     try {
-//         const decoded = jwt.verify(token, process.env.JWT_SECRET); // Verify the token
-//         req.userId = decoded._id; // Attach the user ID to the request object
-//         next();
-//     } catch (err) {
-//         res.status(400).send({ message: "Invalid Token" });
-//     }
-// };
+//         // Extracting the username from the request body
+//         const { username } = req.body;
 
-// // GET: Retrieve Current User Details
-// router.get("/get", authenticateUser, async (req, res) => {
-//     try {
-//         // Fetch user details from the database
-//         const user = await User.findById(req.userId).select("-password"); // Exclude password field
-//         if (!user) return res.status(404).send({ message: "User not found" });
+//         if (!username) {
+//             return res.status(400).send({ message: "Username is required" });
+//         }
 
-//         res.status(200).send(user); // Send user details as the response
+//         // Fetch the user with the specified username
+//         const user = await User.findOne({ username }, { username: 1, email: 1, _id: 0 });
+
+//         if (!user) {
+//             return res.status(404).send({ message: "User not found" });
+//         }
+        
+//         res.status(201).send({message: "Fetched user successfully"})
+
 //     } catch (error) {
 //         console.error(error);
-//         res.status(500).send({ message: "Internal Server Error" });
+//         res.status(500).send({message: "Internal Server Error Fetching User"})
 //     }
-// });
+// })
+
+router.get('/get', userController.getUser);
 
 module.exports = router;

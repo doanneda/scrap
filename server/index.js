@@ -25,6 +25,10 @@ app.use("/api/auth", authRoutes);
 const scrapPageRouter = require('./routes/scrapPageRoute.js')
 app.use('/scrap-pages', scrapPageRouter);
 
+// get curr user logged in
+const userRouter = require('./routes/users.js')
+app.use('/get-user', userRouter);
+
 app.get('/', (req, res) => {
     res.send('Hello World!');
   });
