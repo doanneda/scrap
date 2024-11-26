@@ -36,7 +36,16 @@ const getAllScrapPages = async (req, res) => {
   }
 }
 
+// const searchAllScrapPagesByTag = async (req, res) => {
+//   try {
+
+//   } catch (error) {
+//     console.error('Error fetching scrapbook pages by tags:', error);
+//   }
+// }
+
 module.exports = {
     createScrapPage,
     getAllScrapPages,
+    // searchAllScrapPagesByTag
 };

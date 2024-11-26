@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,6 +7,7 @@ export default function CreatePage() {
   const [images, setImages] = useState([]);
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
+  // const [timeStamp, setTimeStamp] = useState('');
   const name = "TEST3";
   const color = "paleGreen";
   const stickers = [
@@ -93,41 +94,25 @@ export default function CreatePage() {
     });
   };
 
-  // const handleUpload = async () => {
-  //   // Check if all required images are uploaded
-  //   if (images.filter((image) => image !== null).length !== numImages) {
-  //     setError(`Please upload all ${numImages} images before proceeding.`);
-  //     return;
-  //   }
-
-  //   // Resize images and convert to Base64
-  //   const imagePromises = images.map((file) => resizeImage(file));
-
-  //   try {
-  //     const resizedBase64Images = await Promise.all(imagePromises);
-
-  //     // Send to server
-  //     const scrapData = {
-  //       name,
-  //       binaryImages: resizedBase64Images,
-  //       description,
-  //       color,
-  //       stickers
-  //     };
-
-  //     const res = await axios.post(`${process.env.REACT_APP_SERVER_URL}/scrap-pages/add-page`, scrapData);
-  //     console.log('Upload Successful', res.data);
-
-  //     // Reset state after successful upload
-  //     setError('');
-  //     setImages(Array(numImages).fill(null));
-  //     setDescription('');
-  //     alert('Upload successful!');
-  //   } catch (err) {
-  //     console.error('Upload error:', err.message);
-  //     setError('There was an error uploading the images.');
-  //   }
+  // const getFormattedTimestamp = () => {
+  //   const now = new Date();
+  //   const formatted = `${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()} ` +
+  //                     `${now.getHours()}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`;
+  //   console.log(formatted)
+  //   console.log("formatted ", formatted)
+  //   setTimeStamp(formatted);
+  //   console.log("timeStamp ", timeStamp)
+  //   const timestamp = "time"
+    // console.log("timestamp ", timestamp)
   // };
+
+  // useEffect(() => {
+  //   if (timeStamp) {
+  //     console.log("Updated Timestamp:", timeStamp); // This will log when `timeStamp` changes
+  //   }
+  // }, [timeStamp]);
+
+
 
   const handleUpload = async () => {
     // Check if all required images are uploaded
@@ -148,7 +133,16 @@ export default function CreatePage() {
         setError('You must be logged in to upload a scrapbook page.');
         return;
       }
-  
+
+      // get the timestamp
+      const now = new Date();
+      const formatted = `${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()} ` +
+                        `${now.getHours()}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`;
+      console.log(formatted)
+      console.log("formatted ", formatted)
+      // setTimeStamp(formatted);
+      // console.log("timeStamp ", timeStamp)
+
       // Send to server
       const scrapData = {
         // name,
@@ -156,11 +150,13 @@ export default function CreatePage() {
         description,
         color,
         stickers,
-        tags
+        tags,
+        timestamp: formatted,
       };
   
       const res = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/scrap-pages/post`,
+        // `${process.env.REACT_APP_SERVER_URL}/scrap-pages/post`,
+        `http://localhost:4000/scrap-pages/post`,
         scrapData,
         {
           headers: {
