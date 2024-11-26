@@ -140,6 +140,12 @@ export default function Feed() {
                                 </ul>
                             </div>
                         )}
+
+                        <p>
+                          {page.tags.map((tag,index) => (
+                            <span key={index}>#{tag} </span>
+                          ))}
+                        </p>
                     </div>
                 ))}
             </div>
