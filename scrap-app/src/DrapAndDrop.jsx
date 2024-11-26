@@ -25,21 +25,21 @@ export default function DragAndDrop() {
   const pageRef = useRef(null);
 
   const [stickers, setStickers] = useState([
-    { id: 'frog', x: 400, y: 0, imageSource: Frog, stickerType: 'frog', size: { width: 80, height: 80 } },
-    { id: 'lotus', x: 550, y: 0, imageSource: Lotus, stickerType: 'lotus', size: { width: 100, height: 90 } },
-    { id: 'clothespin', x: 700, y: 0, imageSource: Clothespin, stickerType: 'clothespin', size: { width: 50, height: 100 } },
-    { id: 'dipper', x: 400, y: 150, imageSource: Dipper, stickerType: 'dipper', size: { width: 140, height: 90 } },
-    { id: 'flower', x: 550, y: 150, imageSource: Flower, stickerType: 'flower', size: { width: 80, height: 80 } },
-    { id: 'heart', x: 700, y: 150, imageSource: Heart, stickerType: 'heart', size: { width: 80, height: 80 } },
-    { id: 'humanheart', x: 400, y: 300, imageSource: HumanHeart, stickerType: 'humanheart', size: { width: 90, height: 120 } },
-    { id: 'leaf', x: 550, y: 300, imageSource: Leaf, stickerType: 'leaf', size: { width: 90, height: 100 } },
-    { id: 'moon', x: 700, y: 300, imageSource: Moon, stickerType: 'moon', size: { width: 50, height: 80 } },
-    { id: 'orange', x: 400, y: 450, imageSource: Orange, stickerType: 'orange', size: { width: 80, height: 90 } },
-    { id: 'star', x: 550, y: 450, imageSource: Star, stickerType: 'star', size: { width: 90, height: 90 } },
-    { id: 'virus', x: 700, y: 450, imageSource: Virus, stickerType: 'virus', size: { width: 90, height: 90 } },
-    { id: 'wing', x: 400, y: 600, imageSource: Wing, stickerType: 'wing', size: { width: 80, height: 90 } },
-    { id: 'lick', x: 550, y: 550, imageSource: Lick, stickerType: 'lick', size: { width: 210, height: 80 } },
-    { id: 'fence', x: 550, y: 650, imageSource: Fence, stickerType: 'fence', size: { width: 210, height: 60 } },
+    { id: 'frog', x: 800, y: 0, imageSource: Frog, stickerType: 'frog', size: { width: 80, height: 80 } },
+    { id: 'lotus', x: 950, y: 0, imageSource: Lotus, stickerType: 'lotus', size: { width: 100, height: 90 } },
+    { id: 'clothespin', x: 1100, y: 0, imageSource: Clothespin, stickerType: 'clothespin', size: { width: 50, height: 100 } },
+    { id: 'dipper', x: 800, y: 150, imageSource: Dipper, stickerType: 'dipper', size: { width: 140, height: 90 } },
+    { id: 'flower', x: 950, y: 150, imageSource: Flower, stickerType: 'flower', size: { width: 80, height: 80 } },
+    { id: 'heart', x: 1100, y: 150, imageSource: Heart, stickerType: 'heart', size: { width: 80, height: 80 } },
+    { id: 'humanheart', x: 800, y: 300, imageSource: HumanHeart, stickerType: 'humanheart', size: { width: 90, height: 120 } },
+    { id: 'leaf', x: 950, y: 300, imageSource: Leaf, stickerType: 'leaf', size: { width: 90, height: 100 } },
+    { id: 'moon', x: 1100, y: 300, imageSource: Moon, stickerType: 'moon', size: { width: 50, height: 80 } },
+    { id: 'orange', x: 800, y: 450, imageSource: Orange, stickerType: 'orange', size: { width: 80, height: 90 } },
+    { id: 'star', x: 950, y: 450, imageSource: Star, stickerType: 'star', size: { width: 90, height: 90 } },
+    { id: 'virus', x: 1100, y: 450, imageSource: Virus, stickerType: 'virus', size: { width: 90, height: 90 } },
+    { id: 'wing', x: 800, y: 600, imageSource: Wing, stickerType: 'wing', size: { width: 80, height: 90 } },
+    { id: 'lick', x: 950, y: 550, imageSource: Lick, stickerType: 'lick', size: { width: 210, height: 80 } },
+    { id: 'fence', x: 950, y: 650, imageSource: Fence, stickerType: 'fence', size: { width: 210, height: 60 } },
   ]);
   
   
@@ -54,7 +54,7 @@ export default function DragAndDrop() {
       try {
         const res = await axios.get('http://localhost:4000/scrap-pages');
         
-        const pageData = res.data[12]; // Change this index depending on what the current page is
+        const pageData = res.data[0]; // Change this index depending on what the current page is
         
         const imagesArray = pageData.binaryImages.map((image, index) => ({
           id: `image-${index}`,
