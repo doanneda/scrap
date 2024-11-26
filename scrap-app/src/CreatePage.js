@@ -19,9 +19,6 @@ export default function CreatePage() {
       ]
     },
   ];
-  // const tags = [
-  //   "red", "orange", "blue"
-  // ]
   const navigate = useNavigate();
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -54,20 +51,60 @@ export default function CreatePage() {
     setImages(updatedImages);
   };
 
+  // const resizeImage = (file) => {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       const img = new Image();
+  //       img.src = reader.result;
+
+  //       img.onload = () => {
+  //         const canvas = document.createElement('canvas');
+  //         const ctx = canvas.getContext('2d');
+
+  //         let width = img.width;
+  //         let height = img.height;
+
+  //         if (width > height) {
+  //           if (width > MAX_WIDTH) {
+  //             height *= MAX_WIDTH / width;
+  //             width = MAX_WIDTH;
+  //           }
+  //         } else {
+  //           if (height > MAX_HEIGHT) {
+  //             width *= MAX_HEIGHT / height;
+  //             height = MAX_HEIGHT;
+  //           }
+  //         }
+
+  //         canvas.width = width;
+  //         canvas.height = height;
+  //         ctx.drawImage(img, 0, 0, width, height);
+
+  //         resolve(canvas.toDataURL('image/jpeg')); // Base64 encoded image
+  //       };
+
+  //       img.onerror = reject;
+  //     };
+  //     reader.onerror = reject;
+  //     reader.readAsDataURL(file); // Reads the file as base64
+  //   });
+  // };
   const resizeImage = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onloadend = () => {
         const img = new Image();
         img.src = reader.result;
-
+  
         img.onload = () => {
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d');
-
+  
           let width = img.width;
           let height = img.height;
-
+  
+          // Resize image more aggressively if needed
           if (width > height) {
             if (width > MAX_WIDTH) {
               height *= MAX_WIDTH / width;
@@ -79,20 +116,24 @@ export default function CreatePage() {
               height = MAX_HEIGHT;
             }
           }
-
+  
           canvas.width = width;
           canvas.height = height;
           ctx.drawImage(img, 0, 0, width, height);
-
-          resolve(canvas.toDataURL('image/jpeg')); // Base64 encoded image
+  
+          // Reduce quality further (e.g., to 50%)
+          resolve(canvas.toDataURL('image/jpeg', 0.25)); // 50% quality for more compression
+          // Or use PNG if the image is simple and doesn't have many colors:
+          // resolve(canvas.toDataURL('image/png'));
         };
-
+  
         img.onerror = reject;
       };
       reader.onerror = reject;
-      reader.readAsDataURL(file); // Reads the file as base64
+      reader.readAsDataURL(file);
     });
   };
+  
 
   const handleUpload = async () => {
     // Check if all required images are uploaded
@@ -114,18 +155,10 @@ export default function CreatePage() {
         return;
       }
 
-      // get the timestamp
       const now = new Date();
-      // const formatted = `${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()} ` +
-      //                   `${now.getHours()}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`;
-      // console.log(formatted)
-      // console.log("formatted ", formatted)
-      // setTimeStamp(formatted);
-      // console.log("timeStamp ", timeStamp)
 
       // Send to server
       const scrapData = {
-        // name,
         binaryImages: resizedBase64Images,
         description,
         color,
