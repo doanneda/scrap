@@ -36,16 +36,37 @@ const getAllScrapPages = async (req, res) => {
   }
 }
 
-// const searchAllScrapPagesByTag = async (req, res) => {
-//   try {
+const getAllScrapPagesByTag = async (req, res) => {
+  try {
+     // Get the tag from the request (assuming it's passed as a query parameter)
+    const { tag } = req.query; // Use req.params if you're passing the tag in the URL path
+    
+    if (!tag) {
+      getAllScrapPages()
+    }
 
-//   } catch (error) {
-//     console.error('Error fetching scrapbook pages by tags:', error);
-//   }
-// }
+    // Search for scrapbook pages that contain the tag in the 'tags' array
+    const scrapPages = await ScrapPage.find({
+      tags: { $in: [tag] }  // $in checks if the 'tag' exists in the 'tags' array
+    });
+
+    // If no scrap pages found
+    if (scrapPages.length === 0) {
+      getAllScrapPages()
+      return res.status(404).json({ message: 'No scrapbook pages found with that tag' });
+    }
+
+    // Return the matching scrapbook pages
+    res.status(200).json(scrapPages);
+  } catch (error) {
+    getAllScrapPages()
+    console.error('No scrapbook pages found by tags:', error);
+    // res.status(500).json({ error: 'Failed to fetch scrapbook pages by tag' });
+  }
+}
 
 module.exports = {
     createScrapPage,
     getAllScrapPages,
-    // searchAllScrapPagesByTag
+    getAllScrapPagesByTag
 };

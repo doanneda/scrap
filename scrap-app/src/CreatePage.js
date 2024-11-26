@@ -20,7 +20,7 @@ export default function CreatePage() {
     },
   ];
   const tags = [
-    "red", "orange", "slay"
+    "red", "orange", "blue"
   ]
   const navigate = useNavigate();
 
@@ -93,26 +93,6 @@ export default function CreatePage() {
       reader.readAsDataURL(file); // Reads the file as base64
     });
   };
-
-  // const getFormattedTimestamp = () => {
-  //   const now = new Date();
-  //   const formatted = `${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()} ` +
-  //                     `${now.getHours()}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`;
-  //   console.log(formatted)
-  //   console.log("formatted ", formatted)
-  //   setTimeStamp(formatted);
-  //   console.log("timeStamp ", timeStamp)
-  //   const timestamp = "time"
-    // console.log("timestamp ", timestamp)
-  // };
-
-  // useEffect(() => {
-  //   if (timeStamp) {
-  //     console.log("Updated Timestamp:", timeStamp); // This will log when `timeStamp` changes
-  //   }
-  // }, [timeStamp]);
-
-
 
   const handleUpload = async () => {
     // Check if all required images are uploaded
