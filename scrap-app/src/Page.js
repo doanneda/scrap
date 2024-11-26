@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 
-const Page = forwardRef(({ size, children }, ref) => {
+const Page = forwardRef(({ size, color = 'white', children }, ref) => {
   return (
     <div
       ref={ref}
@@ -8,9 +8,10 @@ const Page = forwardRef(({ size, children }, ref) => {
         position: 'relative',
         width: `${size}px`,
         height: `${size}px`,
-        border: '2px solid black',
+        //border: '2px solid black',
         margin: '50px auto',
         overflow: 'visible',
+        backgroundColor: color,
       }}
     >
       {children}
