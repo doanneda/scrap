@@ -27,6 +27,8 @@ const addScrapPageToUser = async (req, res) => {
             description,
             color,
             stickers,
+            tags,
+            timestamp
         });
 
         await newScrapPage.save();
