@@ -43,7 +43,7 @@ export default function Feed() {
               backgroundColor: page.color || '#f9f9f9',
             }}
           >
-            <h3>{page.name}</h3>
+            <h3>{page.username}</h3>
             <p>{page.description}</p>
 
             {/* Render Images */}
@@ -57,7 +57,7 @@ export default function Feed() {
                     //     return base64String; // The result should include 'data:image/...'
                     // };
                     
-                    console.log(image)
+                    // console.log(image)
                     // const imageSrc = bufferToBase64(image);
                       
                     return (
