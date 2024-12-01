@@ -2,6 +2,7 @@ const express = require('express');
 const profileRouter = express.Router();
 const { User } = require('../models/User');
 const ScrapPage = require('../models/scrapPageModel');
+const auth = require("../middleware/auth");
 
 // Get user profile and their scrapbook pages
 profileRouter.get('/users/:userId', async (req, res) => {
@@ -22,30 +23,34 @@ profileRouter.get('/users/:userId', async (req, res) => {
     }
 });
 
-// Update a scrapbook page - dont edit but make it deletable instead
-profileRouter.put('/users/:userId/pages/:pageId', async (req, res) => {
-  try {
-      const { userId, pageId } = req.params;
+// DELETE route to delete a scrapbook page from the profile and database
+profileRouter.delete('/users/:userId/pages/:pageId', auth, async (req, res) => {
+    const { userId, pageId } = req.params;
 
-      // Check if the scrapbook page belongs to the user
-      const page = await ScrapPage.findById(pageId);
-      if (!page) {
-          return res.status(404).json({ message: 'Page not found' });
-      }
+    try {
+        // Find the ScrapPage by its ID
+        const scrapPage = await ScrapPage.findById(pageId);
 
-      if (page.userId.toString() !== userId) {
-          return res.status(403).json({ message: 'Unauthorized to edit this page' });
-      }
+        if (!scrapPage) {
+            return res.status(404).send({ message: 'ScrapPage not found' });
+        }
 
-      // Update the page with new data
-      Object.assign(page, req.body); // Be careful with what data is allowed to be updated
-      await page.save();
+        // Ensure the logged-in user is the same as the user who created the ScrapPage
+        if (scrapPage.user.toString() !== userId) {
+            return res.status(403).send({ message: 'You are not authorized to delete this page' });
+        }
 
-      res.json({ message: 'Page updated successfully', page });
-  } catch (err) {
-      console.error('Error updating scrapbook page:', err);
-      res.status(500).json({ message: 'Error updating scrapbook page' });
-  }
+        // Remove the scrap page from the user's scrapPages array
+        await User.findByIdAndUpdate(userId, { $pull: { scrapPages: pageId } });
+
+        // Delete the scrap page from the ScrapPage collection
+        await ScrapPage.findByIdAndDelete(pageId);
+
+        res.status(200).send({ message: 'ScrapPage deleted successfully' });
+    } catch (err) {
+        console.error('Error deleting ScrapPage:', err);
+        res.status(500).send({ message: 'Error deleting ScrapPage' });
+    }
 });
 
 module.exports = profileRouter;

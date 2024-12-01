@@ -50,6 +50,20 @@ export default function Feed() {
   return (
     <div style={{ padding: '20px' }}>
       <h1>Scrapbook Pages</h1>
+      <Link 
+      to="/createpage"
+      style={{
+        display: 'inline-block',
+        backgroundColor: '#3498db',
+        color: 'white',
+        textDecoration: 'none',
+        padding: '10px 20px',
+        marginBottom: '10px',
+        borderRadius: '10px',
+        fontSize: '1rem',
+      }}>
+        Create a Scrapbook Page
+      </Link>
 
       {/* Error Message */}
       {error && (

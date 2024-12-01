@@ -7,42 +7,65 @@ export default function Profile() {
     const { userId } = useParams(); // Get userId directly from the route parameters
     const [scrapPages, setScrapPages] = useState([]);
     const [error, setError] = useState('');
-    // const loggedInUserId = localStorage.getItem('userId'); // Assuming you store logged-in user's ID in localStorage
-    // console.log(loggedInUserId)
-    const loggedInUserId = "67445622633a507406142121"; //make an edit/route where we find the current users ID
+    const [loggedInUserId, setLoggedInUserId] = useState(null); // Store the logged-in user's ID
+    const [username, setUsername] = useState(''); 
+
+    useEffect(() => {
+        // Fetch the logged-in user's ID from the /me route
+        const fetchLoggedInUser = async () => {
+            try {
+                const res = await axios.get('http://localhost:4000/api/users/me', {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`, // JWT token in header
+                    },
+                });
+                setLoggedInUserId(res.data._id); // Save the logged-in user's ID
+            } catch (err) {
+                console.error("Error fetching user info:", err);
+                setError("Failed to load user information.");
+            }
+        };
+
+        fetchLoggedInUser();
+    }, []);
 
     useEffect(() => {
         const fetchUserPages = async () => {
             try {
                 const res = await axios.get(`http://localhost:4000/profile/users/${userId}`);
                 setScrapPages(res.data.scrapPages); // Store the scrapbook pages
+                setUsername(res.data.username); // Set username
             } catch (err) {
                 console.error('Error fetching scrapbook pages:', err);
                 setError('Failed to load scrapbook pages.');
             }
         };
 
-        fetchUserPages();
+        if (userId) {
+            fetchUserPages();
+        }
     }, [userId]);
 
-    const handleEdit = async (pageId) => {
-        const newDescription = prompt('Enter new description:');
-        if (!newDescription) return;
-
+    // Frontend DELETE request example (React)
+    const handleDelete = async (pageId) => {
+        if (window.confirm('Are you sure you want to delete this page?')) {
         try {
-            const res = await axios.put(`http://localhost:4000/profile/users/${userId}/pages/${pageId}`, {
-                description: newDescription,
+            // Make sure to pass the user's auth token in the header
+            const res = await axios.delete(`http://localhost:4000/profile/users/${userId}/pages/${pageId}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`, // authToken is the JWT token from the user
+            },
             });
-            setScrapPages((prev) =>
-                prev.map((page) =>
-                    page._id === pageId ? { ...page, description: res.data.page.description } : page
-                )
-            );
+    
+            // Update the state to remove the deleted page
+            setScrapPages((prev) => prev.filter((page) => page._id !== pageId));
+            alert('Scrapbook page deleted successfully');
         } catch (err) {
-            console.error('Error updating page:', err);
-            setError('Failed to update the page.');
+            console.error('Error deleting scrapbook page:', err);
+            alert('Error deleting scrapbook page');
         }
-    };
+        }
+    };  
 
     if (error) {
         return <div style={{ color: 'red', textAlign: 'center' }}>{error}</div>;
@@ -54,7 +77,7 @@ export default function Profile() {
 
     return (
         <div className="profile-container">
-            <h1>User's Scrapbook Pages</h1>
+            <h1>{username ? `${username}'s Scrapbook Pages` : "Loading..."}</h1>
             <div className="scrapbook-grid">
                 {scrapPages.map((page) => (
                     <div
@@ -65,20 +88,20 @@ export default function Profile() {
                         <p>{page.description}</p>
 
                         {/* Edit Button (Only for Logged-In User) */}
-                        {loggedInUserId === userId && (
+                        {loggedInUserId && loggedInUserId === userId && (
                             <button
-                                onClick={() => handleEdit(page._id)}
+                                onClick={() => handleDelete(page._id)}
                                 style={{
                                     marginTop: '10px',
                                     padding: '5px 10px',
-                                    backgroundColor: '#007BFF',
+                                    backgroundColor: '#FF0000',
                                     color: '#fff',
                                     border: 'none',
                                     borderRadius: '5px',
                                     cursor: 'pointer',
                                 }}
                             >
-                                Edit
+                                Delete
                             </button>
                         )}
 

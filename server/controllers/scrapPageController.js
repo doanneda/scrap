@@ -30,26 +30,6 @@ const createScrapPage = async (req, res) => {
     console.error('Error saving the scrap page:', err);
     res.status(500).send({ message: 'Error saving the scrap page' });
   }
-
-  // const newScrapPage = new ScrapPage({
-  //   ...req.body,  // Add the body data
-  //   user: user._id, // Associate the ScrapPage with the logged-in user
-  // });
-
-  // try {
-  //   // Save the scrap page to the database
-  //   const savedScrapPage = await newScrapPage.save();
-    
-
-  //   // Update the user's scrapPages array by adding the new scrap page's ID
-  //   await User.findByIdAndUpdate(user._id, { $push: { scrapPages: savedScrapPage._id } });
-
-  //   // Send the saved scrap page as the response
-  //   res.status(201).send(savedScrapPage);
-  // } catch (err) {
-  //   console.error('Error saving the scrap page:', err);
-  //   res.status(500).send({ message: 'Error saving the scrap page' });
-  // }
 };
 
 const getAllScrapPages = async (req, res) => {
@@ -93,8 +73,39 @@ const getAllScrapPagesByTag = async (req, res) => {
   }
 }
 
+const deleteScrapPage = async (req, res) => {
+  const { userId, pageId } = req.params;
+
+  try {
+      // Find the ScrapPage by its ID
+      const scrapPage = await ScrapPage.findById(pageId);
+
+      if (!scrapPage) {
+          return res.status(404).send({ message: 'ScrapPage not found' });
+      }
+
+      // Ensure the logged-in user is the same as the user who created the ScrapPage
+      if (scrapPage.user.toString() !== userId) {
+          return res.status(403).send({ message: 'You are not authorized to delete this page' });
+      }
+
+      // Remove the scrap page from the user's scrapPages array
+      await User.findByIdAndUpdate(userId, { $pull: { scrapPages: pageId } });
+
+      // Delete the scrap page from the ScrapPage collection
+      await scrapPage.remove();
+
+      res.status(200).send({ message: 'ScrapPage deleted successfully' });
+  } catch (err) {
+      console.error('Error deleting ScrapPage:', err);
+      res.status(500).send({ message: 'Error deleting ScrapPage' });
+  }
+};
+
+
 module.exports = {
     createScrapPage,
     getAllScrapPages,
-    getAllScrapPagesByTag
+    getAllScrapPagesByTag,
+    deleteScrapPage
 };

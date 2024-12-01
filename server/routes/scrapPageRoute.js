@@ -22,4 +22,7 @@ scrapPageRouter.get('/', scrapPageController.getAllScrapPages);
 
 scrapPageRouter.get('/by-tag', scrapPageController.getAllScrapPagesByTag);
 
+scrapPageRouter.delete('/:userId/pages/:pageId', auth, scrapPageController.deleteScrapPage);
+// scrapPageRouter.delete('/delete', scrapPageController.deleteScrapPage);
+
 module.exports = scrapPageRouter;
