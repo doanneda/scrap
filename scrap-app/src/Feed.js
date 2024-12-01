@@ -100,7 +100,9 @@ export default function Feed() {
                             backgroundColor: page.color || '#f9f9f9',
                         }}
                     >
-                        <h3>{page.username}</h3>
+                        <Link to={`/profile/${page.user}`}>
+                            <h3>{page.username}</h3>
+                        </Link>
                         <p>{page.description}</p>
 
                         {/* Render Images */}

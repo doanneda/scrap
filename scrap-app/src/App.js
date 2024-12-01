@@ -32,9 +32,9 @@ function App() {
             <Route path="/" element={user ? <CreatePage /> : <Navigate replace to="/login" />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/profile" element={user ? <Profile /> : <Navigate replace to="/login" />} />
             <Route path="/dnd" element={user ? <DragAndDrop /> : <Navigate replace to="/login" />} />
             <Route path="/feed" element={<Feed />} />
+            <Route path="/profile/:userId" element={user ? <Profile /> : <Navigate replace to="/login" />} />
         </Routes>
     );
 
