@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import './Profile.css';
 
 export default function Profile() {
@@ -77,6 +78,9 @@ export default function Profile() {
 
     return (
         <div className="profile-container">
+            <Link to="/feed">
+                Return to feed
+            </Link>
             <h1>{username ? `${username}'s Scrapbook Pages` : "Loading..."}</h1>
             <div className="scrapbook-grid">
                 {scrapPages.map((page) => (
