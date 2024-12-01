@@ -46,13 +46,24 @@ export default function Feed() {
       }
       setSearchTag('');
   };
-
-
-  
   
   return (
     <div style={{ padding: '20px' }}>
       <h1>Scrapbook Pages</h1>
+      <Link 
+      to="/createpage"
+      style={{
+        display: 'inline-block',
+        backgroundColor: '#3498db',
+        color: 'white',
+        textDecoration: 'none',
+        padding: '10px 20px',
+        marginBottom: '10px',
+        borderRadius: '10px',
+        fontSize: '1rem',
+      }}>
+        Create a Scrapbook Page
+      </Link>
 
       {/* Error Message */}
       {error && (
@@ -103,7 +114,9 @@ export default function Feed() {
                             backgroundColor: page.color || '#f9f9f9',
                         }}
                     >
-                        <h3>{page.name}</h3>
+                        <Link to={`/profile/${page.user}`}>
+                            <h3>{page.username}</h3>
+                        </Link>
                         <p>{page.description}</p>
 
                         {/* Render Images */}

@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { User, validate} = require("../models/User");
 const bcrypt = require("bcrypt");
+const auth = require("../middleware/auth"); // Import authentication middleware
 
 router.post("/", async (req, res) => {
     try {
@@ -31,5 +32,20 @@ router.post("/", async (req, res) => {
         res.status(500).send({message: "Internal Server Error"})
     }
 })
+
+router.get("/me", auth, async (req, res) => {
+    try {
+        // `req.user` is populated by the `auth` with the authenticated user's ID
+        const user = await User.findById(req.user._id).select("-password"); // Exclude the password field
+        
+        if (!user) 
+            return res.status(404).send({ message: "User not found" });
+
+        res.status(200).send(user); // Send user details (excluding password)
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: "Internal Server Error" });
+    }
+});
 
 module.exports = router;

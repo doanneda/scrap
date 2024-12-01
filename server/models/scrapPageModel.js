@@ -10,6 +10,10 @@ const scrapPageSchema = new mongoose.Schema({
     ref: 'user', // Match the name of the User model
     required: true,
   },
+  username: {
+    type: String, // Store the username directly
+    required: true,
+  },
   binaryImages: { // images for scrap book page 
     required: false,
     type: [ String ]

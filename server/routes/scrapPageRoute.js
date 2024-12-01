@@ -1,7 +1,5 @@
 const express = require('express');
-//new added stuff
 const auth = require('../middleware/auth'); 
-const userController = require('../controllers/userController');
 
 // const scrapPage = require('../models/scrapPageModel'); // import the schema
 const scrapPageRouter = express.Router(); // get the route
@@ -24,8 +22,7 @@ scrapPageRouter.get('/', scrapPageController.getAllScrapPages);
 
 scrapPageRouter.get('/by-tag', scrapPageController.getAllScrapPagesByTag);
 
-// new added stuff
-// scrapPageRouter.get('/user/:id', userController.getUserWithPages); // Get user with their scrap pages
-// scrapPageRouter.post('/add-page', userController.addScrapPageToUser); // Create a scrap page for a user
+scrapPageRouter.delete('/:userId/pages/:pageId', auth, scrapPageController.deleteScrapPage);
+// scrapPageRouter.delete('/delete', scrapPageController.deleteScrapPage);
 
 module.exports = scrapPageRouter;
