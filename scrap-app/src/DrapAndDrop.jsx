@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import DraggableImage from './DraggableImage';
 import Page from './Page';
@@ -22,6 +23,9 @@ import Lick from './assets/stickers/lick.png';
 import Fence from './assets/stickers/fence.png';
 
 export default function DragAndDrop() {
+  const { pageId } = useParams();
+  //console.log('Page ID:', id); // example pageid: 674ce6077791a8af764214f2
+
   const pageRef = useRef(null);
 
   const stickerMapping = {
@@ -129,7 +133,7 @@ export default function DragAndDrop() {
   useEffect(() => {
     const fetchStickers = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/scrap-pages/get-stickers');
+        const response = await axios.post('http://localhost:4000/scrap-pages/get-stickers', {pageId});
   
         // Add default positions from stickerMapping if missing
         const updatedStickers = response.data.map(sticker => {
@@ -160,7 +164,7 @@ export default function DragAndDrop() {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/scrap-pages/get-images');
+        const response = await axios.post('http://localhost:4000/scrap-pages/get-images', {pageId});
         
         const fetchedImages = response.data.map((image, index) => ({
           id: `image-${index}`,
@@ -238,11 +242,11 @@ export default function DragAndDrop() {
     
     try {
       await axios.put('http://localhost:4000/scrap-pages/save-stickers', {
-        pageId: 'testPageID', // Replace with actual page ID
+        pageId: pageId, // Replace with actual page ID
         stickers: stickerData,
       });
       await axios.put('http://localhost:4000/scrap-pages/save-images', {
-        pageId: 'testPageID', // Replace with actual page ID
+        pageId: pageId, // Replace with actual page ID
         images: imageData,
       });
 

@@ -36,12 +36,13 @@ const getAllScrapPages = async (req, res) => {
   }
 }
 
+
 const saveStickers = async (req, res) => {
-  const { stickers } = req.body; // Expect stickers in the request body
+  const { stickers, pageId } = req.body; // Expect stickers in the request body
 
   try {
     // Find the first ScrapPage document
-    const scrapPage = await ScrapPage.findOne(); // This fetches the first document in the collection CHANGE TO SPECIFIC PAGE LATER
+    const scrapPage = await ScrapPage.findById(pageId);
 
     if (!scrapPage) {
       return res.status(404).json({ error: 'No ScrapPage found.' });
@@ -62,9 +63,10 @@ const saveStickers = async (req, res) => {
 
 
 const getStickers = async (req, res) => {
+  const { pageId } = req.body;
+
   try {
-    // Fetch the first ScrapPage document CHANGE THIS LATER to specify particular page
-    const scrapPage = await ScrapPage.findOne();
+    const scrapPage = await ScrapPage.findById(pageId);
 
     if (!scrapPage) {
       return res.status(404).json({ error: 'No ScrapPage found.' });
@@ -80,9 +82,10 @@ const getStickers = async (req, res) => {
 
 
 const getImages = async (req, res) => {
+  const { pageId } = req.body;
+
   try {
-    // Fetch the first ScrapPage document CHANGE THIS LATER to specify particular page
-    const scrapPage = await ScrapPage.findOne();
+    const scrapPage = await ScrapPage.findById(pageId);
 
     if (!scrapPage) {
       return res.status(404).json({ error: 'No ScrapPage found.' });
@@ -97,11 +100,10 @@ const getImages = async (req, res) => {
 
 
 const saveImages = async (req, res) => {
-  const { images } = req.body; // Expect stickers in the request body
+  const { images, pageId } = req.body;
 
   try {
-    // Find the first ScrapPage document
-    const scrapPage = await ScrapPage.findOne(); // This fetches the first document in the collection CHANGE TO SPECIFIC PAGE LATER
+    const scrapPage = await ScrapPage.findById(pageId);
 
     if (!scrapPage) {
       return res.status(404).json({ error: 'No ScrapPage found.' });

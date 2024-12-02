@@ -36,7 +36,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/createPage" element={<CreatePage />} />
-            <Route path="/dnd" element={<DragAndDrop />} />
+            <Route path="/dnd/:pageId" element={<DragAndDrop />} />
             <Route path="/feed" element={<Feed />} />
           </Routes>
     </div>

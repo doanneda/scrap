@@ -22,11 +22,12 @@ scrapPageRouter.get('/user-pages', auth, async (req, res) => {
 
 scrapPageRouter.get('/', scrapPageController.getAllScrapPages);
 
-scrapPageRouter.put('/save-stickers', scrapPageController.saveStickers);
-scrapPageRouter.get('/get-stickers', scrapPageController.getStickers);
+scrapPageRouter.post('/get-stickers', scrapPageController.getStickers);
+scrapPageRouter.post('/get-images', scrapPageController.getImages);
 
-scrapPageRouter.get('/get-images', scrapPageController.getImages);
+scrapPageRouter.put('/save-stickers', scrapPageController.saveStickers);
 scrapPageRouter.put('/save-images', scrapPageController.saveImages);
+
 
 
 // new added stuff
