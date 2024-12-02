@@ -1,17 +1,5 @@
 const mongoose = require('mongoose');
 
-
-const stickerSchema = new mongoose.Schema({
-  stickerType: {
-    type: String,
-    required: true,
-  },
-  position: {
-    x: { type: Number, required: true },
-    y: { type: Number, required: true },
-  },
-});
-
 const scrapPageSchema = new mongoose.Schema({
   // name: { // user name or id associated with the scrap book page
   //   required: true,
@@ -34,11 +22,34 @@ const scrapPageSchema = new mongoose.Schema({
     required: false, // default can be white
     type: String, // pastel colors 
   },
-  stickers: {
-    type: [stickerSchema], // Embedded array of stickers
-    default: [], // Default to an empty array if no stickers are saved
+  stickers: { // store number, position, and type of stickers
+    required: false, 
+    type: [
+      {
+        stickerType: { 
+          type: String, required: true 
+        }, // sticker type (ex. 'emoji', 'star', etc.)
+        position: {
+          type: [
+            {
+              x: { // x position in percentage
+                type: Number, 
+                required: true 
+              }, 
+              y: { // y position in percentage
+                type: Number, 
+                required: true 
+              }, 
+            },
+          ],
+        },
+      },
+    ],
   },
-  
+  tags: {
+    required: false,
+    type: [ String ]
+  }
 });
 
 module.exports = mongoose.model('ScrapPage', scrapPageSchema);
