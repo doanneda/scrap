@@ -149,7 +149,7 @@ export default function CreatePage() {
     }
 
     // route to the feed page
-    navigate('/feed');
+    navigate('/');
   };
 
   // Handle change in the input field
