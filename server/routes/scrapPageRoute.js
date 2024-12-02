@@ -22,6 +22,8 @@ scrapPageRouter.get('/user-pages', auth, async (req, res) => {
 
 scrapPageRouter.get('/', scrapPageController.getAllScrapPages);
 scrapPageRouter.put('/save-stickers', scrapPageController.saveStickers);
+scrapPageRouter.get('/get-stickers', scrapPageController.getStickers);
+
 
 // new added stuff
 // scrapPageRouter.get('/user/:id', userController.getUserWithPages); // Get user with their scrap pages

@@ -24,30 +24,139 @@ import Fence from './assets/stickers/fence.png';
 export default function DragAndDrop() {
   const pageRef = useRef(null);
 
-  const [stickers, setStickers] = useState([
-    { id: 'frog', x: 800, y: 0, imageSource: Frog, stickerType: 'frog', size: { width: 80, height: 80 } },
-    { id: 'lotus', x: 950, y: 0, imageSource: Lotus, stickerType: 'lotus', size: { width: 100, height: 90 } },
-    { id: 'clothespin', x: 1100, y: 0, imageSource: Clothespin, stickerType: 'clothespin', size: { width: 50, height: 100 } },
-    { id: 'dipper', x: 800, y: 150, imageSource: Dipper, stickerType: 'dipper', size: { width: 140, height: 90 } },
-    { id: 'flower', x: 950, y: 150, imageSource: Flower, stickerType: 'flower', size: { width: 80, height: 80 } },
-    { id: 'heart', x: 1100, y: 150, imageSource: Heart, stickerType: 'heart', size: { width: 80, height: 80 } },
-    { id: 'humanheart', x: 800, y: 300, imageSource: HumanHeart, stickerType: 'humanheart', size: { width: 90, height: 120 } },
-    { id: 'leaf', x: 950, y: 300, imageSource: Leaf, stickerType: 'leaf', size: { width: 90, height: 100 } },
-    { id: 'moon', x: 1100, y: 300, imageSource: Moon, stickerType: 'moon', size: { width: 50, height: 80 } },
-    { id: 'orange', x: 800, y: 450, imageSource: Orange, stickerType: 'orange', size: { width: 80, height: 90 } },
-    { id: 'star', x: 950, y: 450, imageSource: Star, stickerType: 'star', size: { width: 90, height: 90 } },
-    { id: 'virus', x: 1100, y: 450, imageSource: Virus, stickerType: 'virus', size: { width: 90, height: 90 } },
-    { id: 'wing', x: 800, y: 600, imageSource: Wing, stickerType: 'wing', size: { width: 80, height: 90 } },
-    { id: 'lick', x: 950, y: 550, imageSource: Lick, stickerType: 'lick', size: { width: 210, height: 80 } },
-    { id: 'fence', x: 950, y: 650, imageSource: Fence, stickerType: 'fence', size: { width: 210, height: 60 } },
-  ]);
+  const stickerMapping = {
+    frog: {
+      size: { width: 80, height: 80 },
+      imageSource: Frog,
+      x: 800,
+      y: 0,
+    },
+    lotus: {
+      size: { width: 100, height: 90 },
+      imageSource: Lotus,
+      x: 950,
+      y: 0,
+    },
+    clothespin: {
+      size: { width: 50, height: 100 },
+      imageSource: Clothespin,
+      x: 1100,
+      y: 0,
+    },
+    dipper: {
+      size: { width: 140, height: 90 },
+      imageSource: Dipper,
+      x: 800,
+      y: 150,
+    },
+    flower: {
+      size: { width: 80, height: 80 },
+      imageSource: Flower,
+      x: 950,
+      y: 150,
+    },
+    heart: {
+      size: { width: 80, height: 80 },
+      imageSource: Heart,
+      x: 1100,
+      y: 150,
+    },
+    humanheart: {
+      size: { width: 90, height: 120 },
+      imageSource: HumanHeart,
+      x: 800,
+      y: 300,
+    },
+    leaf: {
+      size: { width: 90, height: 100 },
+      imageSource: Leaf,
+      x: 950,
+      y: 300,
+    },
+    moon: {
+      size: { width: 50, height: 80 },
+      imageSource: Moon,
+      x: 1100,
+      y: 300,
+    },
+    orange: {
+      size: { width: 80, height: 90 },
+      imageSource: Orange,
+      x: 800,
+      y: 450,
+    },
+    star: {
+      size: { width: 90, height: 90 },
+      imageSource: Star,
+      x: 950,
+      y: 450,
+    },
+    virus: {
+      size: { width: 90, height: 90 },
+      imageSource: Virus,
+      x: 1100,
+      y: 450,
+    },
+    wing: {
+      size: { width: 80, height: 90 },
+      imageSource: Wing,
+      x: 800,
+      y: 600,
+    },
+    lick: {
+      size: { width: 210, height: 80 },
+      imageSource: Lick,
+      x: 950,
+      y: 550,
+    },
+    fence: {
+      size: { width: 210, height: 60 },
+      imageSource: Fence,
+      x: 950,
+      y: 650,
+    },
+  };
   
-  
+
+  const [stickers, setStickers] = useState([]);
+
 
   const [bounds, setBounds] = useState({ top: 0, left: 0, bottom: 0, right: 0 });
   const [error, setError] = useState('');
   const [images, setImages] = useState([]);
 
+
+  useEffect(() => {
+    const fetchStickers = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/scrap-pages/get-stickers');
+  
+        // Add default positions from stickerMapping if missing
+        const updatedStickers = response.data.map(sticker => {
+          const { stickerType } = sticker;
+          const { size, imageSource, x = 0, y = 0 } = stickerMapping[stickerType] || {};
+  
+          return {
+            id: stickerType,
+            stickerType,
+            x: sticker.position?.x || x,  // Fallback to default x from stickerMapping
+            y: sticker.position?.y || y,  // Fallback to default y from stickerMapping
+            size: size || { width: 80, height: 80 },
+            imageSource: imageSource || "",
+          };
+        });
+  
+        setStickers(updatedStickers);  // Set the stickers with correct x and y values
+      } catch (error) {
+        console.error('Error fetching stickers:', error);
+      }
+    };
+  
+    fetchStickers();
+  }, []);
+  
+  
+  
 
   useEffect(() => {
     const fetchScrapData = async () => {
@@ -121,7 +230,7 @@ export default function DragAndDrop() {
       stickerType: sticker.stickerType,
       position: { x: sticker.x, y: sticker.y },
     }));
-  
+    
     try {
       await axios.put('http://localhost:4000/scrap-pages/save-stickers', {
         pageId: 'testPageID', // Replace with actual page ID
@@ -133,6 +242,7 @@ export default function DragAndDrop() {
       alert('Failed to save stickers.');
     }
   };
+  
   
 
   return (

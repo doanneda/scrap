@@ -37,23 +37,44 @@ const getAllScrapPages = async (req, res) => {
 }
 
 const saveStickers = async (req, res) => {
-  const { pageId, stickers } = req.body; // Expect pageId and stickers in the request body
+  const { stickers } = req.body; // Expect stickers in the request body
 
   try {
-    const scrapPage = await ScrapPage.findById(pageId);
+    // Find the first ScrapPage document
+    const scrapPage = await ScrapPage.findOne(); // This fetches the first document in the collection CHANGE TO SPECIFIC PAGE LATER
 
     if (!scrapPage) {
-      return res.status(404).json({ error: 'ScrapPage not found' });
+      return res.status(404).json({ error: 'No ScrapPage found.' });
     }
 
+    // Update the stickers array
     scrapPage.stickers = stickers;
 
+    // Save the updated document
     const updatedPage = await scrapPage.save();
 
     res.status(200).json(updatedPage);
   } catch (error) {
-    console.error('Error saving stickers:', error);
-    res.status(500).json({ error: 'Failed to save stickers' });
+    console.error('Error saving stickers:', error.message);
+    res.status(500).json({ error: 'Failed to save stickers.', details: error.message });
+  }
+};
+
+
+const getStickers = async (req, res) => {
+  try {
+    // Fetch the first ScrapPage document
+    const scrapPage = await ScrapPage.findOne();
+
+    if (!scrapPage) {
+      return res.status(404).json({ error: 'No ScrapPage found.' });
+    }
+
+    // Send the stickers array as the response
+    res.status(200).json(scrapPage.stickers);
+  } catch (error) {
+    console.error('Error fetching stickers:', error.message);
+    res.status(500).json({ error: 'Failed to fetch stickers.', details: error.message });
   }
 };
 
@@ -62,4 +83,5 @@ module.exports = {
     createScrapPage,
     getAllScrapPages,
     saveStickers,
+    getStickers,
 };
