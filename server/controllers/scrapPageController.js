@@ -63,7 +63,7 @@ const saveStickers = async (req, res) => {
 
 const getStickers = async (req, res) => {
   try {
-    // Fetch the first ScrapPage document
+    // Fetch the first ScrapPage document CHANGE THIS LATER to specify particular page
     const scrapPage = await ScrapPage.findOne();
 
     if (!scrapPage) {
@@ -79,9 +79,53 @@ const getStickers = async (req, res) => {
 };
 
 
+const getImages = async (req, res) => {
+  try {
+    // Fetch the first ScrapPage document CHANGE THIS LATER to specify particular page
+    const scrapPage = await ScrapPage.findOne();
+
+    if (!scrapPage) {
+      return res.status(404).json({ error: 'No ScrapPage found.' });
+    }
+
+    res.status(200).json(scrapPage.images);
+  } catch (error) {
+    console.error('Error fetching images:', error.message);
+    res.status(500).json({ error: 'Failed to fetch images.', details: error.message });
+  }
+};
+
+
+const saveImages = async (req, res) => {
+  const { images } = req.body; // Expect stickers in the request body
+
+  try {
+    // Find the first ScrapPage document
+    const scrapPage = await ScrapPage.findOne(); // This fetches the first document in the collection CHANGE TO SPECIFIC PAGE LATER
+
+    if (!scrapPage) {
+      return res.status(404).json({ error: 'No ScrapPage found.' });
+    }
+
+    // Update the stickers array
+    scrapPage.images = images;
+
+    // Save the updated document
+    const updatedPage = await scrapPage.save();
+
+    res.status(200).json(updatedPage);
+  } catch (error) {
+    console.error('Error saving images:', error.message);
+    res.status(500).json({ error: 'Failed to save images.', details: error.message });
+  }
+};
+
+
 module.exports = {
     createScrapPage,
     getAllScrapPages,
     saveStickers,
     getStickers,
+    saveImages,
+    getImages,
 };

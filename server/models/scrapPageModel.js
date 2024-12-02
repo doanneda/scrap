@@ -8,6 +8,18 @@ const stickerSchema = new mongoose.Schema({
   },
 });
 
+const imageSchema = new mongoose.Schema({
+  base64: String,
+  position: {
+    x: Number,
+    y: Number,
+  },
+  size: {
+    width: Number,
+    height: Number,
+  }
+});
+
 const scrapPageSchema = new mongoose.Schema({
   // name: { // user name or id associated with the scrap book page
   //   required: true,
@@ -18,10 +30,7 @@ const scrapPageSchema = new mongoose.Schema({
     ref: 'user', // Match the name of the User model
     required: true,
   },
-  binaryImages: { // images for scrap book page 
-    required: false,
-    type: [ String ]
-  },
+  images: [imageSchema],
   description: { // text for scrap book page
     required: false,
     type: String

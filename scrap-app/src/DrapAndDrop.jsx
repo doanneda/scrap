@@ -119,11 +119,11 @@ export default function DragAndDrop() {
   
 
   const [stickers, setStickers] = useState([]);
+  const [images, setImages] = useState([]);
 
 
   const [bounds, setBounds] = useState({ top: 0, left: 0, bottom: 0, right: 0 });
   const [error, setError] = useState('');
-  const [images, setImages] = useState([]);
 
 
   useEffect(() => {
@@ -139,8 +139,8 @@ export default function DragAndDrop() {
           return {
             id: stickerType,
             stickerType,
-            x: sticker.position?.x || x,  // Fallback to default x from stickerMapping
-            y: sticker.position?.y || y,  // Fallback to default y from stickerMapping
+            x: sticker.position.x || x,
+            y: sticker.position.y || y,
             size: size || { width: 80, height: 80 },
             imageSource: imageSource || "",
           };
@@ -157,31 +157,29 @@ export default function DragAndDrop() {
   
   
   
-
   useEffect(() => {
-    const fetchScrapData = async () => {
+    const fetchImages = async () => {
       try {
-        const res = await axios.get('http://localhost:4000/scrap-pages');
+        const response = await axios.get('http://localhost:4000/scrap-pages/get-images');
         
-        const pageData = res.data[0]; // Change this index depending on what the current page is
-        
-        const imagesArray = pageData.binaryImages.map((image, index) => ({
+        const fetchedImages = response.data.map((image, index) => ({
           id: `image-${index}`,
-          x: -600, 
-          y: index*200,
-          size: { width: 200, height: 200 },
-          binaryImages: image,
+          x: image.position.x || -600,
+          y: image.position.y || index * 200,
+          size: image.size,
+          base64: image.base64,
         }));
         
-        setImages(imagesArray);
+        setImages(fetchedImages); // Update the images state with fetched data
       } catch (err) {
-        console.error('Error fetching scrapbook data:', err);
-        setError('Failed to load scrapbook data.');
+        console.error('Error fetching images:', err);
+        setError('Failed to load images.');
       }
     };
   
-    fetchScrapData();
+    fetchImages();
   }, []);
+
   
 
   useEffect(() => {
@@ -226,20 +224,32 @@ export default function DragAndDrop() {
 
 
   const handleSave = async () => {
-    const preparedData = stickers.map((sticker) => ({
+    const stickerData = stickers.map((sticker) => ({
       stickerType: sticker.stickerType,
       position: { x: sticker.x, y: sticker.y },
     }));
+
+    const imageData = images.map((image) => ({
+      position: { x: image.x, y: image.y },
+      base64: image.base64,
+      size: image.size,
+    }));
+  
     
     try {
       await axios.put('http://localhost:4000/scrap-pages/save-stickers', {
         pageId: 'testPageID', // Replace with actual page ID
-        stickers: preparedData,
+        stickers: stickerData,
       });
-      alert('Stickers saved successfully!');
+      await axios.put('http://localhost:4000/scrap-pages/save-images', {
+        pageId: 'testPageID', // Replace with actual page ID
+        images: imageData,
+      });
+
+      alert('Images and Stickers saved successfully!');
     } catch (err) {
-      console.error('Error saving stickers:', err);
-      alert('Failed to save stickers.');
+      console.error('Error saving', err);
+      alert('Failed to save.');
     }
   };
   
@@ -256,7 +266,7 @@ export default function DragAndDrop() {
               id={image.id}
               position={{ x: image.x, y: image.y }}
               size={image.size}
-              imageSource={image.binaryImages}
+              imageSource={image.base64}
             />
           ))
         ) : (
@@ -272,9 +282,29 @@ export default function DragAndDrop() {
             />
           ))}
         </Page>
-        <button onClick={handleSave} style={{ marginTop: '20px' }}>
-          Save Stickers
-        </button>
+        <button
+        onClick={handleSave}
+        style={{
+          marginTop: '20px',
+          backgroundColor: '#007BFF',  // Blue background
+          color: 'white',              // White text
+          border: 'none',              // No border
+          padding: '10px 20px',        // Padding around the text
+          fontSize: '16px',            // Font size
+          borderRadius: '10px',       // Rounded corners
+          cursor: 'pointer',          // Pointer cursor on hover
+          display: 'block',            // Center the button
+          marginLeft: 'auto',          // Center horizontally
+          marginRight: 'auto',         // Center horizontally
+          textAlign: 'center',        // Center text
+          transition: 'background-color 0.3s ease', // Smooth transition for hover effect
+        }}
+        onMouseOver={(e) => (e.target.style.backgroundColor = '#0056b3')} // Hover effect
+        onMouseOut={(e) => (e.target.style.backgroundColor = '#007BFF')} // Hover effect
+      >
+        Save
+      </button>
+
     </DndContext>
   );
   
