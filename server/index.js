@@ -6,6 +6,7 @@ const connection = require("./db");
 const userRoutes = require('./routes/users');
 const authRoutes = require('./routes/auth');
 const scrapPageRouter = require('./routes/scrapPageRoute');
+const profileRouter = require('./routes/profileRoute');
 // const mongoose = require('mongoose');
 
 // const uri = "mongodb+srv://scrapUser:3G0hCeLWGXVr4JYE@scrap.hfxhm.mongodb.net/?retryWrites=true&w=majority&appName=scrap"
@@ -22,6 +23,7 @@ app.use(cors());
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use('/scrap-pages', scrapPageRouter);
+app.use('/profile', profileRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello World!');

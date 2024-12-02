@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import CreatePage from './CreatePage.js';
 import Profile from './Profile.js';
@@ -28,19 +27,20 @@ function App() {
     }, []);
 
     return (
-    <div>
         <Routes>
             {/* If the user is logged in, show Main, otherwise navigate to /login */}
-            <Route path="/" element={user ? <CreatePage /> : <Navigate replace to="/login" />} />
+            <Route path="/" element={user ? <Feed /> : <Navigate replace to="/login" />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/createPage" element={<CreatePage />} />
             <Route path="/dnd/:pageId" element={<DragAndDrop />} />
             <Route path="/feed" element={<Feed />} />
-          </Routes>
-    </div>
-  );
+            <Route path="/createpage" element={<CreatePage />} />
+            <Route path="/profile/:userId" element={user ? <Profile /> : <Navigate replace to="/login" />} />
+        </Routes>
+    );
+
 }
 
 export default App;

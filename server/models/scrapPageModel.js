@@ -30,6 +30,10 @@ const scrapPageSchema = new mongoose.Schema({
     ref: 'user', // Match the name of the User model
     required: true,
   },
+  username: {
+    type: String, // Store the username directly
+    required: true,
+  },
   images: [imageSchema],
   description: { // text for scrap book page
     required: false,
@@ -43,6 +47,10 @@ const scrapPageSchema = new mongoose.Schema({
   tags: {
     required: false,
     type: [ String ]
+  },
+  timestamp: {
+    required: false, 
+    type: Date
   }
 });
 
