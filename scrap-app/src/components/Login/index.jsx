@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
 import { Link } from "react-router-dom";
 
-const Login = () => {
+const Login = ({ setUser }) => {
     const [data, setData] = useState({ username: "", password: "" });
     const [error, setError] = useState("");
     const navigate = useNavigate();
@@ -13,29 +13,25 @@ const Login = () => {
         setData({ ...data, [input.name]: input.value });
     };
 
+  
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const url = "http://localhost:4000/api/auth";
-            const { data: res } = await axios.post(url, data);
-            localStorage.setItem("token", res.data);
-            // use navigate to go to the main page after login
-            navigate("/");
-            console.log(res.message); 
-        } catch (error) {
-            if (
-                error.response &&
-                error.response.status >= 400 &&
-                error.response.status <= 500
-            ) {
-                setError(error.response.data.message); // show error if any
-            }
+      e.preventDefault();
+      try {
+        const url = "http://localhost:4000/api/auth";
+        const { data: res } = await axios.post(url, data);
+        localStorage.setItem("token", res.data);
+        setUser(true); // Update user state
+        navigate("/"); // Redirect to the home page
+      } catch (error) {
+        if (error.response?.status >= 400 && error.response?.status <= 500) {
+          setError(error.response.data.message);
         }
+      }
     };
-
+  
     return (
-        <div className={styles.login_container}>
-            <div className={styles.login_form_container}>
+      <div className={styles.login_container}>
+        <div className={styles.login_form_container}>
                 <div className={styles.left}>
                     <form className={styles.form_container} onSubmit={handleSubmit}>
                         <h1>Login to Your Account</h1>
@@ -72,8 +68,8 @@ const Login = () => {
                     </Link>
                 </div>
             </div>
-        </div>
+      </div>
     );
-};
-
-export default Login;
+  };
+  
+  export default Login;  
