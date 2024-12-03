@@ -78,7 +78,7 @@ export default function Profile() {
 
     return (
         <div className="profile-container">
-            <Link to="/feed">
+            <Link to="/">
                 Return to feed
             </Link>
             <h1>{username ? `${username}'s Scrapbook Pages` : "Loading..."}</h1>
