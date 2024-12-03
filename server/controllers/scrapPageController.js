@@ -49,29 +49,69 @@ const getAllScrapPagesByTag = async (req, res) => {
      // Get the tag from the request (assuming it's passed as a query parameter)
     const { tag } = req.query; // Use req.params if you're passing the tag in the URL path
     
+    // If no tag is provided, return all scrapbook pages
     if (!tag) {
-      getAllScrapPages()
+      console.log("No tag provided, returning all pages");
+      const allScrapPages = await getAllScrapPages(); // Assume this function returns all scrapbook pages
+      return res.status(200).json(allScrapPages); // Send all pages as response
     }
+
+    console.log("Tag is:", tag);
 
     // Search for scrapbook pages that contain the tag in the 'tags' array
     const scrapPages = await ScrapPage.find({
       tags: { $in: [tag] }  // $in checks if the 'tag' exists in the 'tags' array
     }).sort({ timestamp: -1 }); // Sort by timestamp in descending order
 
-    // If no scrap pages found
+    // If no scrap pages found, return all pages as fallback
     if (scrapPages.length === 0) {
-      getAllScrapPages()
-      return res.status(404).json({ message: 'No scrapbook pages found with that tag' });
+      console.log(`No pages found with the tag "${tag}", returning all pages`);
+      const allScrapPages = await getAllScrapPages(); // Fetch all pages if no pages found with the tag
+      return res.status(200).json(allScrapPages); // Send all pages as response
     }
 
     // Return the matching scrapbook pages
     res.status(200).json(scrapPages);
+
   } catch (error) {
-    getAllScrapPages()
-    console.error('No scrapbook pages found by tags:', error);
-    // res.status(500).json({ error: 'Failed to fetch scrapbook pages by tag' });
+    console.error('Error fetching scrapbook pages by tag:', error);
+    // Return an error response
+    res.status(500).json({ error: 'Failed to fetch scrapbook pages by tag' });
   }
 }
+
+
+// const getAllScrapPagesByTag = async (req, res) => {
+//   try {
+//      // Get the tag from the request (assuming it's passed as a query parameter)
+//     const { tag } = req.query; // Use req.params if you're passing the tag in the URL path
+    
+//     if (!tag) {
+//       console.log("No tag provided");
+//       getAllScrapPages()
+//     }
+
+//     console.log("tag is ", tag)
+
+//     // Search for scrapbook pages that contain the tag in the 'tags' array
+//     const scrapPages = await ScrapPage.find({
+//       tags: { $in: [tag] }  // $in checks if the 'tag' exists in the 'tags' array
+//     }).sort({ timestamp: -1 }); // Sort by timestamp in descending order
+
+//     // If no scrap pages found
+//     if (scrapPages.length === 0) {
+//       getAllScrapPages()
+//       // return res.status(404).json({ message: 'No scrapbook pages found with that tag' });
+//     }
+
+//     // Return the matching scrapbook pages
+//     res.status(200).json(scrapPages);
+//   } catch (error) {
+//     getAllScrapPages()
+//     console.error('No scrapbook pages found by tags:', error);
+//     // res.status(500).json({ error: 'Failed to fetch scrapbook pages by tag' });
+//   }
+// }
 
 const deleteScrapPage = async (req, res) => {
   const { userId, pageId } = req.params;

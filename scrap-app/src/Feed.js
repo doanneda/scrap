@@ -33,12 +33,40 @@ export default function Feed() {
   // Trigger search when the button is clicked
   const handleSearchClick = async () => {
       if (searchTag.trim()) {
+        console.log("searchTag: ", searchTag)
+
           try {
             const res = await axios.get(`http://localhost:4000/scrap-pages/by-tag?tag=${searchTag}`); // Make the search request
+            console.log("searching in .js file")
+            console.log("res: ", res)
             setFilteredData(res.data); // Set the filtered data based on search results
+    
+            // if (res.length === 0) {
+            //     console.log("empty bc not found")
+            //     const res2 = await axios.get('http://localhost:4000/scrap-pages'); // Fetch all the scrap pages
+            //     setScrapData(res2.data); // Assuming the response contains an array of scrapbook data
+
+            //     setFilteredData(res2.data); // Initially, display all pages
+            // } 
+            // else {
+                // setFilteredData(res.data); // Set the filtered data based on search results
+            // }
+            
           } catch (err) {
-              console.error('Error searching scrapbook pages by tag:', err);
-              setError(`No scrapbook pages found with '${searchTag}'`);
+            console.log("ERROR BLEH")
+            const res = await axios.get('http://localhost:4000/scrap-pages'); // Fetch all the scrap pages
+            setScrapData(res.data); // Assuming the response contains an array of scrapbook data
+
+            setFilteredData(res.data); // Initially, display all pages
+            // if (err.code === 'ERR_NETWORK') {
+            //     console.error("Network error: Unable to connect to the server");
+            //     setError("Unable to connect to the server. Please try again later.");
+            // } else {
+            //     console.error("Error searching scrapbook pages by tag:", err);
+            //     setError(`No scrapbook pages found with '${searchTag}'`);
+            // } 
+                // console.error('Error searching scrapbook pages by tag:', err);
+                // setError(`No scrapbook pages found with '${searchTag}'`);
           }
       } else {
           // If no search term, display all scrapbook pages
