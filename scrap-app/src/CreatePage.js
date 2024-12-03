@@ -9,6 +9,8 @@ export default function CreatePage() {
   const [tagInput, setTagInput] = useState('');
   const [tags, setTags] = useState([]);
   const [error, setError] = useState('');
+  const [currentPrompt, setCurrentPrompt] = useState('');
+
   const color = "paleGreen";
   const stickers = [
     {
@@ -24,6 +26,36 @@ export default function CreatePage() {
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
   const MAX_WIDTH = 700; // decreased this from 800 
   const MAX_HEIGHT = 700; // decreased this from 800
+
+  const prompts = [
+    "Document a day in your life.",
+    "What’s your favorite holiday tradition?",
+    "Create a travel log for your dream vacation.",
+    "Highlight your favorite family recipe.",
+    "Capture the essence of your hometown.",
+    "A timeline of your life’s most important milestones.",
+    "What’s your favorite season and why?",
+    "Your bucket list adventures.",
+    "Your favorite childhood memory.",
+    "Your pet’s personality in photos.",
+    "A celebration of your best friend(s).",
+    "Your favorite book, movie, or song.",
+    "A letter to your future self.",
+    "Your favorite holiday moments.",
+    "A photo collage of your favorite people.",
+    "Your dream home vision board.",
+    "A tribute to someone you admire.",
+    "Your favorite weekend activity.",
+    "The best meal you ever had.",
+    "Your favorite childhood toy or game.",
+    "Seasonal bucket list.",
+    "Your personal growth story.",
+    "A scrapbook of your achievements.",
+    "A day at your favorite place.",
+    "The story of your name.",
+    "Create a mood board of your favorite aesthetic.",
+    "Your favorite memories of school.",
+  ];
 
   const handleNumImagesChange = (event) => {
     const newNumImages = parseInt(event.target.value, 10);
@@ -50,6 +82,7 @@ export default function CreatePage() {
     updatedImages[index] = null;
     setImages(updatedImages);
   };
+
   const resizeImage = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -164,16 +197,23 @@ export default function CreatePage() {
       setTags([...tags, tagInput]); // Add the new tag to the array
       setTagInput(''); // Clear the input field
     }
+  }
+
+  const generateRandomPrompt = () => {
+    const randomIndex = Math.floor(Math.random() * prompts.length);
+    setCurrentPrompt(prompts[randomIndex]);
   };
   
 
   return (
-    <div>
-      {/* Dropdown for Number of Images */}
-      <div>
+    <div style={{ fontFamily: "Arial, sans-serif", padding: "20px", maxWidth: "900px", margin: "auto" }}>
+      <h1 style={{ textAlign: "center", marginBottom: "30px" }}>Create Scrapbook Page</h1>
+
+      {/* Number of Images */}
+      <div style={{ marginBottom: "20px" }}>
         <label>
           Select number of images:
-          <select value={numImages} onChange={handleNumImagesChange}>
+          <select value={numImages} onChange={handleNumImagesChange} style={{ marginLeft: "10px", padding: "5px" }}>
             {[1, 2, 3, 4].map((num) => (
               <option key={num} value={num}>
                 {num}
@@ -183,40 +223,44 @@ export default function CreatePage() {
         </label>
       </div>
 
-      {/* Dynamic Grid for Image Slots */}
+      {/* Image Upload Grid */}
       <div
         style={{
-          display: 'grid',
+          display: "grid",
           gridTemplateColumns: `repeat(${Math.min(2, numImages)}, 1fr)`,
-          gap: '10px',
+          gap: "15px",
+          justifyContent: "center",
+          marginBottom: "20px",
         }}
       >
         {Array.from({ length: numImages }).map((_, index) => (
-          <div key={index} style={{ position: 'relative', textAlign: 'center' }}>
+          <div key={index} style={{ position: "relative", textAlign: "center" }}>
             {images[index] ? (
               <>
                 <img
                   src={URL.createObjectURL(images[index])}
                   alt="Preview"
                   style={{
-                    width: '100px',
-                    height: '100px',
-                    objectFit: 'cover',
+                    width: "100px",
+                    height: "100px",
+                    objectFit: "cover",
+                    margin: "auto",
+                    display: "block",
                   }}
                 />
                 <button
                   onClick={() => handleRemove(index)}
                   style={{
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    backgroundColor: 'red',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '50%',
-                    width: '20px',
-                    height: '20px',
-                    cursor: 'pointer',
+                    position: "absolute",
+                    top: "5px",
+                    right: "5px",
+                    backgroundColor: "red",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "50%",
+                    width: "20px",
+                    height: "20px",
+                    cursor: "pointer",
                   }}
                 >
                   &times;
@@ -226,20 +270,21 @@ export default function CreatePage() {
               <label>
                 <div
                   style={{
-                    width: '100px',
-                    height: '100px',
-                    border: '1px dashed gray',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
+                    width: "100px",
+                    height: "100px",
+                    border: "1px dashed gray",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    margin: "auto",
                   }}
                 >
                   +
                 </div>
                 <input
                   type="file"
-                  style={{ display: 'none' }}
+                  style={{ display: "none" }}
                   onChange={(e) => handleFileChange(index, e)}
                 />
               </label>
@@ -249,18 +294,19 @@ export default function CreatePage() {
       </div>
 
       {/* Text Input Section For Description */}
-      <div style={{ marginTop: '20px' }}>
+      <div style={{ marginTop: "20px" }}>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Enter a description here..."
           style={{
-            width: '100%',
-            height: '80px',
-            padding: '10px',
-            fontSize: '14px',
-            border: '1px solid gray',
-            borderRadius: '5px',
+            width: "100%",
+            minHeight: "100px",
+            padding: "10px",
+            fontSize: "16px",
+            border: "1px solid gray",
+            borderRadius: "5px",
+            resize: "vertical",
           }}
         ></textarea>
       </div>
@@ -313,9 +359,9 @@ export default function CreatePage() {
       {error && (
         <div
           style={{
-            marginTop: '10px',
-            color: 'red',
-            fontSize: '14px',
+            color: "red",
+            fontSize: "14px",
+            marginBottom: "20px",
           }}
         >
           {error}
@@ -323,20 +369,52 @@ export default function CreatePage() {
       )}
 
       {/* Upload Button */}
-      <button
-        onClick={handleUpload}
-        style={{
-          marginTop: '20px',
-          padding: '10px 20px',
-          backgroundColor: 'blue',
-          color: 'white',
-          border: 'none',
-          borderRadius: '5px',
-          cursor: 'pointer',
-        }}
-      >
-        Upload
-      </button>
+      <div style={{ textAlign: "center", marginBottom: "30px" }}>
+        <button
+          onClick={handleUpload}
+          style={{
+            padding: "10px 20px",
+            backgroundColor: "blue",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          Upload
+        </button>
+      </div>
+
+      {/* Random Prompt Section */}
+      <div style={{ textAlign: "center" }}>
+        <h2>Random Prompt</h2>
+        <div
+          style={{
+            margin: "10px auto",
+            padding: "15px",
+            border: "1px solid #ccc",
+            borderRadius: "8px",
+            maxWidth: "400px",
+            backgroundColor: "#f9f9f9",
+          }}
+        >
+          {currentPrompt || "Click the button to generate a prompt!"}
+        </div>
+        <button
+          onClick={generateRandomPrompt}
+          style={{
+            padding: "10px 20px",
+            backgroundColor: "green",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+            marginTop: "10px",
+          }}
+        >
+          Generate Prompt
+        </button>
+      </div>
     </div>
   );
 }
