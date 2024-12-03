@@ -120,12 +120,12 @@ export default function Feed() {
                         <p>{page.description}</p>
 
                         {/* Render Images */}
-                        {page.binaryImages && page.binaryImages.length > 0 ? (
+                        {page.images && page.images.length > 0 ? (
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '10px' }}>
-                                {page.binaryImages.map((image, index) => (
+                                {page.images.map((image, index) => (
                                     <img
                                         key={index}
-                                        src={image}
+                                        src={image.base64}
                                         alt={`Scrapbook ${index}`}
                                         style={{ width: '150px', height: '150px', objectFit: 'cover' }}
                                     />
@@ -137,21 +137,18 @@ export default function Feed() {
 
                         {/* Stickers Section */}
                         {page.stickers && page.stickers.length > 0 && (
-                            <div>
-                                <h4>Stickers:</h4>
-                                <ul>
-                                    {page.stickers.map((sticker, stickerIndex) => (
-                                        <li key={stickerIndex}>
-                                            Type: {sticker.stickerType}, Positions:{' '}
-                                            {sticker.position.map((pos, posIndex) => (
-                                                <span key={posIndex}>
-                                                    ({pos.x}, {pos.y}){' '}
-                                                </span>
-                                            ))}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
+                          <div>
+                            <h4>Stickers:</h4>
+                            <ul>
+                              {page.stickers.map((sticker, stickerIndex) => (
+                                <li key={stickerIndex}>
+                                  {/* Check if sticker.position exists before accessing x and y */}
+                                  Type: {sticker.stickerType}, Position: (
+                                  {sticker.position ? `${sticker.position.x}, ${sticker.position.y}` : 'Position not defined'})
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
                         )}
 
                         <p>
