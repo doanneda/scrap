@@ -8,19 +8,11 @@ export default function CreatePage() {
   const [description, setDescription] = useState('');
   const [tagInput, setTagInput] = useState('');
   const [tags, setTags] = useState([]);
+  const [ratios, setRatios] = useState(Array(1).fill('4x3')); // Default to '4x3' for all slots
   const [error, setError] = useState('');
-  const [currentPrompt, setCurrentPrompt] = useState('');
+  const [currentPrompt, setCurrentPrompt] = useState("");
+  const color = "#ece7f1";
 
-  const color = "paleGreen";
-  const stickers = [
-    {
-      "stickerType": "emoji",
-      "position": [
-        { "x": 10, "y": 20 },
-        { "x": 30, "y": 40 }
-      ]
-    },
-  ];
   const navigate = useNavigate();
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -83,6 +75,12 @@ export default function CreatePage() {
     setImages(updatedImages);
   };
 
+  const handleRatioChange = (index, ratio) => {
+    const updatedRatios = [...ratios];
+    updatedRatios[index] = ratio;
+    setRatios(updatedRatios);
+  };
+
   const resizeImage = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -125,7 +123,6 @@ export default function CreatePage() {
     });
   };
   
-
   const handleUpload = async () => {
     // Check if all required images are uploaded
     if (images.filter((image) => image !== null).length !== numImages) {
@@ -133,11 +130,30 @@ export default function CreatePage() {
       return;
     }
   
+    // Define dimensions for each ratio
+    const ratioDimensions = {
+      "4x3": { width: 320, height: 240 },
+      "3x3": { width: 240, height: 240 },
+      "3x4": { width: 240, height: 320 },
+    };
+
     // Resize images and convert to Base64
-    const imagePromises = images.map((file) => resizeImage(file));
+    const imagePromises = images.map((file, index) =>
+      resizeImage(file).then((base64Data) => {
+        const selectedRatio = ratios[index]; // Access the ratio for the specific image slot
+        const { width, height } = ratioDimensions[selectedRatio] || {}; // Fallback to default if ratioState is undefined
+
+        return {
+          base64Data,
+          type: file.type, // e.g., image/jpeg, image/png, etc.
+          position: { x: 0, y: 0 }, // Default position
+          size: { width, height }, // Use dimensions based on selected ratio
+        };
+      })
+    );
   
     try {
-      const resizedBase64Images = await Promise.all(imagePromises);
+      const resizedImages = await Promise.all(imagePromises);
   
       // Retrieve user token from local storage
       const token = localStorage.getItem('token');
@@ -145,21 +161,19 @@ export default function CreatePage() {
         setError('You must be logged in to upload a scrapbook page.');
         return;
       }
-
+  
       const now = new Date();
-
+  
       // Send to server
       const scrapData = {
-        binaryImages: resizedBase64Images,
+        images: resizedImages, // Pass the array of image objects with metadata
         description,
         color,
-        stickers,
         tags,
         timestamp: now,
       };
   
       const res = await axios.post(
-        // `${process.env.REACT_APP_SERVER_URL}/scrap-pages/post`,
         `http://localhost:4000/scrap-pages/post`,
         scrapData,
         {
@@ -171,20 +185,23 @@ export default function CreatePage() {
   
       console.log('Upload Successful', res.data);
   
+      // Capture the ID returned by MongoDB (assuming it's in res.data._id)
+      const pageId = res.data._id;
+  
       // Reset state after successful upload
       setError('');
       setImages(Array(numImages).fill(null));
       setDescription('');
       alert('Upload successful!');
+  
+      // Route to the Drag and Drop page with the generated ID
+      navigate(`/dnd/${pageId}`); // Use the pageId in the URL
     } catch (err) {
       console.error('Upload error:', err.message);
       setError('There was an error uploading the images.');
     }
-
-    // route to the feed page
-    navigate('/');
   };
-
+  
   // Handle change in the input field
   const handleTagInputChange = (e) => {
     setTagInput(e.target.value);
@@ -203,11 +220,46 @@ export default function CreatePage() {
     const randomIndex = Math.floor(Math.random() * prompts.length);
     setCurrentPrompt(prompts[randomIndex]);
   };
-  
 
   return (
     <div style={{ fontFamily: "Arial, sans-serif", padding: "20px", maxWidth: "900px", margin: "auto" }}>
       <h1 style={{ textAlign: "center", marginBottom: "30px" }}>Create Scrapbook Page</h1>
+
+      {/* Random Prompt Section */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center", // Align items vertically in the center
+          justifyContent: "center", // Center horizontally
+          margin: "20px 0",
+        }}
+      >
+        <h2 style={{ marginRight: "15px" }}>Random Prompt</h2>
+        <div
+          style={{
+            padding: "10px 15px",
+            border: "1px solid #ccc",
+            borderRadius: "8px",
+            backgroundColor: "#f9f9f9",
+          }}
+        >
+          {currentPrompt || "Click the button to generate a prompt!"}
+        </div>
+        <button
+          onClick={generateRandomPrompt}
+          style={{
+            padding: "10px 20px",
+            marginLeft: "10px",
+            backgroundColor: "green",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          Generate Prompt
+        </button>
+      </div>
 
       {/* Number of Images */}
       <div style={{ marginBottom: "20px" }}>
@@ -289,6 +341,25 @@ export default function CreatePage() {
                 />
               </label>
             )}
+
+            <div>
+              {['4x3', '3x3', '3x4'].map((ratio) => (
+                <button
+                  key={ratio}
+                  style={{
+                    margin: '5px',
+                    backgroundColor: ratios[index] === ratio ? 'blue' : 'gray',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '5px',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => handleRatioChange(index, ratio)}
+                >
+                  {ratio}
+                </button>
+              ))}
+            </div>
           </div>
         ))}
       </div>
@@ -382,37 +453,6 @@ export default function CreatePage() {
           }}
         >
           Upload
-        </button>
-      </div>
-
-      {/* Random Prompt Section */}
-      <div style={{ textAlign: "center" }}>
-        <h2>Random Prompt</h2>
-        <div
-          style={{
-            margin: "10px auto",
-            padding: "15px",
-            border: "1px solid #ccc",
-            borderRadius: "8px",
-            maxWidth: "400px",
-            backgroundColor: "#f9f9f9",
-          }}
-        >
-          {currentPrompt || "Click the button to generate a prompt!"}
-        </div>
-        <button
-          onClick={generateRandomPrompt}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "green",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-            marginTop: "10px",
-          }}
-        >
-          Generate Prompt
         </button>
       </div>
     </div>

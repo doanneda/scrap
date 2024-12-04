@@ -143,9 +143,99 @@ const deleteScrapPage = async (req, res) => {
 };
 
 
+
+const saveStickers = async (req, res) => {
+  const { stickers, pageId } = req.body; // Expect stickers in the request body
+
+  try {
+    // Find the first ScrapPage document
+    const scrapPage = await ScrapPage.findById(pageId);
+
+    if (!scrapPage) {
+      return res.status(404).json({ error: 'No ScrapPage found.' });
+    }
+
+    // Update the stickers array
+    scrapPage.stickers = stickers;
+
+    // Save the updated document
+    const updatedPage = await scrapPage.save();
+
+    res.status(200).json(updatedPage);
+  } catch (error) {
+    console.error('Error saving stickers:', error.message);
+    res.status(500).json({ error: 'Failed to save stickers.', details: error.message });
+  }
+};
+
+
+const getStickers = async (req, res) => {
+  const { pageId } = req.body;
+
+  try {
+    const scrapPage = await ScrapPage.findById(pageId);
+
+    if (!scrapPage) {
+      return res.status(404).json({ error: 'No ScrapPage found.' });
+    }
+
+    // Send the stickers array as the response
+    res.status(200).json(scrapPage.stickers);
+  } catch (error) {
+    console.error('Error fetching stickers:', error.message);
+    res.status(500).json({ error: 'Failed to fetch stickers.', details: error.message });
+  }
+};
+
+
+const getImages = async (req, res) => {
+  const { pageId } = req.body;
+
+  try {
+    const scrapPage = await ScrapPage.findById(pageId);
+
+    if (!scrapPage) {
+      return res.status(404).json({ error: 'No ScrapPage found.' });
+    }
+
+    res.status(200).json(scrapPage.images);
+  } catch (error) {
+    console.error('Error fetching images:', error.message);
+    res.status(500).json({ error: 'Failed to fetch images.', details: error.message });
+  }
+};
+
+
+const saveImages = async (req, res) => {
+  const { images, pageId } = req.body;
+
+  try {
+    const scrapPage = await ScrapPage.findById(pageId);
+
+    if (!scrapPage) {
+      return res.status(404).json({ error: 'No ScrapPage found.' });
+    }
+
+    scrapPage.images = images;
+
+    // Save the updated document
+    const updatedPage = await scrapPage.save();
+
+    res.status(200).json(updatedPage);
+  } catch (error) {
+    console.error('Error saving images:', error.message);
+    res.status(500).json({ error: 'Failed to save images.', details: error.message });
+  }
+};
+
+
 module.exports = {
     createScrapPage,
     getAllScrapPages,
     getAllScrapPagesByTag,
-    deleteScrapPage
+    deleteScrapPage,
+    saveStickers,
+    getStickers,
+    saveImages,
+    getImages,
 };

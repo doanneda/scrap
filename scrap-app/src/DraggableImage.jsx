@@ -23,13 +23,16 @@ const DraggableImage = forwardRef(
     // Determine the image source (URL or base64-encoded file)
     const getImageSource = () => {
       if (typeof imageSource === 'string') {
-        return imageSource; // URL or placeholder
+        return imageSource;
       }
+    
       if (imageSource instanceof File) {
         return URL.createObjectURL(imageSource); // Create URL for the file
       }
+    
       return 'https://via.placeholder.com/100'; // Fallback
     };
+    
 
     return (
       <img

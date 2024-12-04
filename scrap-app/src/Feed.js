@@ -1,33 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { stickerMapping } from './stickerMapping';  // Import the sticker mapping
 
 export default function Feed() {
-    const [scrapData, setScrapData] = useState([]);
-    const [error, setError] = useState('');
+  const [scrapData, setScrapData] = useState([]);
+  const [error, setError] = useState('');
 
-    const [searchTag, setSearchTag] = useState(''); // State to hold the search tag
-    const [filteredData, setFilteredData] = useState([]); // State to hold filtered scrap data based on search
+  const [searchTag, setSearchTag] = useState(''); // State to hold the search tag
+  const [filteredData, setFilteredData] = useState([]); // State to hold filtered scrap data based on search
 
-    useEffect(() => {
-        const fetchScrapData = async () => {
-          try {
-            const res = await axios.get('http://localhost:4000/scrap-pages'); // Fetch all the scrap pages
-            setScrapData(res.data); // Assuming the response contains an array of scrapbook data
+  useEffect(() => {
+    const fetchScrapData = async () => {
+      try {
+        const res = await axios.get('http://localhost:4000/scrap-pages'); // Fetch all the scrap pages
+        setScrapData(res.data); // Assuming the response contains an array of scrapbook data
 
-            setFilteredData(res.data); // Initially, display all pages
-          } catch (err) {
-            console.error('Error fetching scrapbook data:', err);
-            setError('Failed to load scrapbook data.');
-          }
-        };
-    
-        fetchScrapData();
-      }, []);
+        setFilteredData(res.data); // Initially, display all pages
+      } catch (err) {
+        console.error('Error fetching scrapbook data:', err);
+        setError('Failed to load scrapbook data.');
+      }
+    };
+
+    fetchScrapData();
+  }, []);
 
   // Handle the search input change
   const handleSearchChange = (event) => {
-      setSearchTag(event.target.value); // Update the search term as user types
+    setSearchTag(event.target.value); // Update the search term as user types
   };
 
   // Trigger search when the button is clicked
@@ -74,122 +75,170 @@ export default function Feed() {
       }
       setSearchTag('');
   };
-  
+
+
   return (
     <div style={{ padding: '20px' }}>
       <h1>Scrapbook Pages</h1>
-      <Link 
-      to="/createpage"
-      style={{
-        display: 'inline-block',
-        backgroundColor: '#3498db',
-        color: 'white',
-        textDecoration: 'none',
-        padding: '10px 20px',
-        marginBottom: '10px',
-        borderRadius: '10px',
-        fontSize: '1rem',
-      }}>
+      <Link
+        to="/createpage"
+        style={{
+          display: 'inline-block',
+          backgroundColor: '#3498db',
+          color: 'white',
+          textDecoration: 'none',
+          padding: '10px 20px',
+          marginBottom: '10px',
+          borderRadius: '10px',
+          fontSize: '1rem',
+        }}
+      >
         Create a Scrapbook Page
       </Link>
-
+  
       {/* Error Message */}
       {error && (
         <div style={{ color: 'red', marginBottom: '10px' }}>
           {error}
         </div>
       )}
-
+  
       {/* Search Input (By Tag) */}
       <div style={{ marginBottom: '20px' }}>
         <input
-            type="text"
-            placeholder="Search by tag..."
-            value={searchTag}
-            onChange={handleSearchChange} // Handle input change
-            style={{
-                padding: '8px',
-                width: '300px',
-                borderRadius: '5px',
-                border: '1px solid #ccc',
-            }}
+          type="text"
+          placeholder="Search by tag..."
+          value={searchTag}
+          onChange={handleSearchChange}
+          style={{
+            padding: '8px',
+            width: '300px',
+            borderRadius: '5px',
+            border: '1px solid #ccc',
+          }}
         />
         <button
-            onClick={handleSearchClick} // Trigger search when button is clicked
-            style={{
-                padding: '8px 16px',
-                marginLeft: '10px',
-                borderRadius: '5px',
-                backgroundColor: '#007bff',
-                color: 'white',
-                border: 'none',
-                cursor: 'pointer',
-            }}
+          onClick={handleSearchClick}
+          style={{
+            padding: '8px 16px',
+            marginLeft: '10px',
+            borderRadius: '5px',
+            backgroundColor: '#007bff',
+            color: 'white',
+            border: 'none',
+            cursor: 'pointer',
+          }}
         >
-            Search
+          Search
         </button>
       </div>
+  
+      {/* Scrollable Container for Scrapbook Pages */}
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center', // Center scrapbook pages horizontally
+          justifyContent: 'center', // Center scrapbook pages vertically
+          overflowY: 'scroll',
+        }}
+      >
+        {filteredData.map((page, index) => (
+          <div
+            key={index}
+            style={{
+              border: '1px solid #ccc',
+              borderRadius: '10px',
+              padding: '10px',
+              backgroundColor: page.color || '#f9f9f9',
+              width: '750px',
+              height: '750px',
+              marginBottom: '20px',
+              position: 'relative',
+              overflow: 'hidden',
+            }}
+          >
+            <Link to={`/profile/${page.user}`}>
+              <h3>{page.username}</h3>
+            </Link>
+            <p>{page.description}</p>
+  
+            {/* Render Images */}
+            {page.images && page.images.length > 0 ? (
+              <div
+                style={{
+                  position: 'relative',
+                  width: '100%',
+                  height: '100%',
+                }}
+              >
+            {page.images.map((image, imgIndex) => (
+            <img
+                key={imgIndex}
+                src={image.base64Data}
+                alt={`Scrapbook ${imgIndex}`}
+                style={{
+                position: 'absolute',
+                left: image.position.x,
+                top: image.position.y,
+                width: image.size.width,
+                height: image.size.height,
+                borderRadius: '15px',
+                }}
+            />
+            ))}
 
-              {/* Render Scrapbook Pages */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '20px' }}>
-                {filteredData.map((page, index) => (
-                    <div
-                        key={index}
-                        style={{
-                            border: '1px solid #ccc',
-                            borderRadius: '10px',
-                            padding: '10px',
-                            backgroundColor: page.color || '#f9f9f9',
-                        }}
-                    >
-                        <Link to={`/profile/${page.user}`}>
-                            <h3>{page.username}</h3>
-                        </Link>
-                        <p>{page.description}</p>
-
-                        {/* Render Images */}
-                        {page.binaryImages && page.binaryImages.length > 0 ? (
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '10px' }}>
-                                {page.binaryImages.map((image, index) => (
-                                    <img
-                                        key={index}
-                                        src={image}
-                                        alt={`Scrapbook ${index}`}
-                                        style={{ width: '150px', height: '150px', objectFit: 'cover' }}
-                                    />
-                                ))}
-                            </div>
-                        ) : (
-                            <p>No images available</p>
-                        )}
-
-                        {/* Stickers Section */}
-                        {page.stickers && page.stickers.length > 0 && (
-                            <div>
-                                <h4>Stickers:</h4>
-                                <ul>
-                                    {page.stickers.map((sticker, stickerIndex) => (
-                                        <li key={stickerIndex}>
-                                            Type: {sticker.stickerType}, Positions:{' '}
-                                            {sticker.position.map((pos, posIndex) => (
-                                                <span key={posIndex}>
-                                                    ({pos.x}, {pos.y}){' '}
-                                                </span>
-                                            ))}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
-
-                        <p>
-                          {page.tags.map((tag,index) => (
-                            <span key={index}>#{tag} </span>
-                          ))}
-                        </p>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
+                {/* Stickers Section */}
+                {page.stickers.map((sticker, stickerIndex) => {
+                  const {
+                    stickerType,
+                    position = { x: 0, y: 0 },
+                    size = { width: 100, height: 100 },
+                  } = sticker;
+  
+                  const { imageSource } = stickerMapping[stickerType] || {};
+  
+                  // Debugging Logs
+                  // console.log('Sticker Type:', stickerType);
+                  // console.log('Image Source:', imageSource);
+  
+                  if (!imageSource) {
+                    console.error(
+                      `Sticker type "${stickerType}" not found in stickerMapping.`
+                    );
+                    return null;
+                  }
+  
+                  return (
+                    <img
+                      key={stickerIndex}
+                      src={imageSource}
+                      alt={`Sticker ${stickerIndex}`}
+                      style={{
+                        position: 'absolute',
+                        left: position.x,
+                        top: position.y,
+                        width: size.width,
+                        height: size.height,
+                        objectFit: 'contain',
+                        zIndex: 10,
+                      }}
+                    />
+                  );
+                })}
+                {/* Tags Section */}
+                <p>
+                  {page.tags.map((tag, tagIndex) => (
+                    <span key={tagIndex}>#{tag} </span>
+                  ))}
+                </p>
+              </div>
+            ) : (
+              <p>No stickers/images available</p>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );  
 }

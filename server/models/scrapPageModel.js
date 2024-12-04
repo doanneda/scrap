@@ -1,5 +1,25 @@
 const mongoose = require('mongoose');
 
+const stickerSchema = new mongoose.Schema({
+  stickerType: String,
+  position: {
+    x: Number,
+    y: Number,
+  },
+});
+
+const imageSchema = new mongoose.Schema({
+  base64Data: String,
+  position: {
+    x: Number,
+    y: Number,
+  },
+  size: {
+    width: Number,
+    height: Number,
+  },
+});
+
 const scrapPageSchema = new mongoose.Schema({
   // name: { // user name or id associated with the scrap book page
   //   required: true,
@@ -14,9 +34,8 @@ const scrapPageSchema = new mongoose.Schema({
     type: String, // Store the username directly
     required: true,
   },
-  binaryImages: { // images for scrap book page 
-    required: false,
-    type: [ String ]
+  images: {
+    type: [imageSchema],
   },
   description: { // text for scrap book page
     required: false,
@@ -26,29 +45,8 @@ const scrapPageSchema = new mongoose.Schema({
     required: false, // default can be white
     type: String, // pastel colors 
   },
-  stickers: { // store number, position, and type of stickers
-    required: false, 
-    type: [
-      {
-        stickerType: { 
-          type: String, required: true 
-        }, // sticker type (ex. 'emoji', 'star', etc.)
-        position: {
-          type: [
-            {
-              x: { // x position in percentage
-                type: Number, 
-                required: true 
-              }, 
-              y: { // y position in percentage
-                type: Number, 
-                required: true 
-              }, 
-            },
-          ],
-        },
-      },
-    ],
+  stickers: {
+    type: [stickerSchema],
   },
   tags: {
     required: false,
