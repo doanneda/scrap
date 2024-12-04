@@ -74,7 +74,7 @@ export default function Profile() {
     return (
         <div style={{ padding: '20px' }}>
             <Link
-                to="/feed"
+                to="/"
                 style={{
                     display: 'inline-block',
                     backgroundColor: '#3498db',

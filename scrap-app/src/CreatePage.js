@@ -225,6 +225,42 @@ export default function CreatePage() {
     <div style={{ fontFamily: "Arial, sans-serif", padding: "20px", maxWidth: "900px", margin: "auto" }}>
       <h1 style={{ textAlign: "center", marginBottom: "30px" }}>Create Scrapbook Page</h1>
 
+      {/* Random Prompt Section */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center", // Align items vertically in the center
+          justifyContent: "center", // Center horizontally
+          margin: "20px 0",
+        }}
+      >
+        <h2 style={{ marginRight: "15px" }}>Random Prompt</h2>
+        <div
+          style={{
+            padding: "10px 15px",
+            border: "1px solid #ccc",
+            borderRadius: "8px",
+            backgroundColor: "#f9f9f9",
+          }}
+        >
+          {currentPrompt || "Click the button to generate a prompt!"}
+        </div>
+        <button
+          onClick={generateRandomPrompt}
+          style={{
+            padding: "10px 20px",
+            marginLeft: "10px",
+            backgroundColor: "green",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          Generate Prompt
+        </button>
+      </div>
+
       {/* Number of Images */}
       <div style={{ marginBottom: "20px" }}>
         <label>
@@ -417,37 +453,6 @@ export default function CreatePage() {
           }}
         >
           Upload
-        </button>
-      </div>
-
-      {/* Random Prompt Section */}
-      <div style={{ textAlign: "center" }}>
-        <h2>Random Prompt</h2>
-        <div
-          style={{
-            margin: "10px auto",
-            padding: "15px",
-            border: "1px solid #ccc",
-            borderRadius: "8px",
-            maxWidth: "400px",
-            backgroundColor: "#f9f9f9",
-          }}
-        >
-          {currentPrompt || "Click the button to generate a prompt!"}
-        </div>
-        <button
-          onClick={generateRandomPrompt}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "green",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-            marginTop: "10px",
-          }}
-        >
-          Generate Prompt
         </button>
       </div>
     </div>

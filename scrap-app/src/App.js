@@ -30,7 +30,7 @@ function App() {
             <Routes>
                 {/* Redirect non-logged-in users to /login */}
                 <Route path="/" element={user ? <Feed /> : <Navigate replace to="/login" />} />
-                <Route path="/dnd" element={user ? <DragAndDrop /> : <Navigate replace to="/login" />} />
+                <Route path="/dnd/:pageId" element={user ? <DragAndDrop /> : <Navigate replace to="/login" />} />
                 <Route path="/createpage" element={user ? <CreatePage /> : <Navigate replace to="/login" />} />
                 <Route path="/profile/:userId" element={user ? <Profile /> : <Navigate replace to="/login" />} />
 
