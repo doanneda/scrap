@@ -21,10 +21,6 @@ const imageSchema = new mongoose.Schema({
 });
 
 const scrapPageSchema = new mongoose.Schema({
-  // name: { // user name or id associated with the scrap book page
-  //   required: true,
-  //   type: String,
-  // },
   user: { // Reference to the User model
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user', // Match the name of the User model

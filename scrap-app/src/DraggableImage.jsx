@@ -14,10 +14,6 @@ const DraggableImage = forwardRef(
       cursor: 'pointer',
       position: 'absolute', // Ensure proper stacking and positioning
       borderRadius: '15px', // Rounded corners
-      // border: '5px solid', // Gradient border
-      // backgroundOrigin: 'border-box',
-      // backgroundClip: 'padding-box, border-box',
-      // boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06)', // Soft shadow
     };
 
     // Determine the image source (URL or base64-encoded file)
