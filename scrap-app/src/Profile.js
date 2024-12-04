@@ -108,7 +108,7 @@ export default function Profile() {
                             padding: '10px',
                             backgroundColor: page.color || '#f9f9f9',
                             width: '750px',
-                            height: '750px',
+                            height: '882px',
                             marginBottom: '20px',
                             position: 'relative',
                             overflow: 'hidden',
@@ -139,7 +139,7 @@ export default function Profile() {
                         )}
 
                         {page.images && page.images.length > 0 ? (
-                            <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                            <div style={{ position: 'relative', width: '100%', height: '85%' }}>
                                 {page.images.map((image, imgIndex) => (
                                     <img
                                         key={imgIndex}
