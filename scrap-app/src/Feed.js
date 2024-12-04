@@ -174,10 +174,9 @@ export default function Feed() {
                   const {
                     stickerType,
                     position = { x: 0, y: 0 },
-                    size = { width: 100, height: 100 },
                   } = sticker;
   
-                  const { imageSource } = stickerMapping[stickerType] || {};
+                  const { imageSource, size } = stickerMapping[stickerType] || {};
   
                   // Debugging Logs
                   // console.log('Sticker Type:', stickerType);

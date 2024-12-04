@@ -156,8 +156,8 @@ export default function Profile() {
                                     />
                                 ))}
                                 {page.stickers.map((sticker, stickerIndex) => {
-                                    const { stickerType, position = { x: 0, y: 0 }, size = { width: 100, height: 100 } } = sticker;
-                                    const { imageSource } = stickerMapping[stickerType] || {};
+                                    const { stickerType, position = { x: 0, y: 0 } } = sticker;
+                                    const { imageSource, size } = stickerMapping[stickerType] || {};
 
                                     if (!imageSource) {
                                         console.error(`Sticker type "${stickerType}" not found in stickerMapping.`);

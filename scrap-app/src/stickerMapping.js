@@ -96,7 +96,7 @@ export const stickerMapping = {
     y: 600,
   },
   lick: {
-    size: { width: 210, height: 80 },
+    size: { width: 210, height: 120 },
     imageSource: Lick,
     x: 950,
     y: 550,
