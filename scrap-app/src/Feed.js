@@ -48,6 +48,7 @@ export default function Feed() {
     setSearchTag('');
   };
 
+
   return (
     <div style={{ padding: '20px' }}>
       <h1>Scrapbook Pages</h1>
@@ -66,21 +67,21 @@ export default function Feed() {
       >
         Create a Scrapbook Page
       </Link>
-
+  
       {/* Error Message */}
       {error && (
         <div style={{ color: 'red', marginBottom: '10px' }}>
           {error}
         </div>
       )}
-
+  
       {/* Search Input (By Tag) */}
       <div style={{ marginBottom: '20px' }}>
         <input
           type="text"
           placeholder="Search by tag..."
           value={searchTag}
-          onChange={handleSearchChange} // Handle input change
+          onChange={handleSearchChange}
           style={{
             padding: '8px',
             width: '300px',
@@ -89,7 +90,7 @@ export default function Feed() {
           }}
         />
         <button
-          onClick={handleSearchClick} // Trigger search when button is clicked
+          onClick={handleSearchClick}
           style={{
             padding: '8px 16px',
             marginLeft: '10px',
@@ -103,52 +104,52 @@ export default function Feed() {
           Search
         </button>
       </div>
-
-  {/* Scrollable Container for Scrapbook Pages */}
-  <div
-    style={{
-      display: 'flex',
-      flexDirection: 'column', // Stack pages vertically
-      overflowY: 'scroll', // Enable vertical scrolling
-      paddingRight: '20px', // To prevent horizontal scroll due to margin/padding
-    }}
-  >
-    {filteredData.map((page, index) => (
+  
+      {/* Scrollable Container for Scrapbook Pages */}
       <div
-        key={index}
         style={{
-          border: '1px solid #ccc',
-          borderRadius: '10px',
-          padding: '10px',
-          backgroundColor: page.color || '#f9f9f9',
-          width: '750px', // Set width to 750px
-          height: '750px', // Set height to 750px
-          marginBottom: '20px', // Space between pages
-          position: 'relative', // Make sure the position is relative for absolute positioning inside
-          overflow: 'hidden', // Ensure that anything outside the 750x750 container is clipped
+          display: 'flex',
+          flexDirection: 'column',
+          overflowY: 'scroll',
+          paddingRight: '20px',
         }}
       >
+        {filteredData.map((page, index) => (
+          <div
+            key={index}
+            style={{
+              border: '1px solid #ccc',
+              borderRadius: '10px',
+              padding: '10px',
+              backgroundColor: page.color || '#f9f9f9',
+              width: '750px',
+              height: '750px',
+              marginBottom: '20px',
+              position: 'relative',
+              overflow: 'hidden',
+            }}
+          >
             <Link to={`/profile/${page.user}`}>
               <h3>{page.username}</h3>
             </Link>
             <p>{page.description}</p>
-
+  
             {/* Render Images */}
             {page.images && page.images.length > 0 ? (
               <div
                 style={{
-                  position: 'relative', // Make sure the images are positioned within this container
+                  position: 'relative',
                   width: '100%',
                   height: '100%',
                 }}
               >
-                {page.images.map((image, index) => {
-                  //console.log(image);
-                  return (
+                {page.images.map((image, imgIndex) => {
+                  console.log(image.base64Data);
+                  return(
                     <img
-                      key={index}
-                      src={image.base64}
-                      alt={`Scrapbook ${index}`}
+                      key={imgIndex}
+                      src={image.base64Data}
+                      alt={`Scrapbook ${imgIndex}`}
                       style={{
                         position: 'absolute',
                         left: image.position.x,
@@ -158,60 +159,59 @@ export default function Feed() {
                         objectFit: 'cover',
                       }}
                     />
+                  )
+                })}
+                {/* Stickers Section */}
+                {page.stickers.map((sticker, stickerIndex) => {
+                  const {
+                    stickerType,
+                    position = { x: 0, y: 0 },
+                    size = { width: 100, height: 100 },
+                  } = sticker;
+  
+                  const { imageSource } = stickerMapping[stickerType] || {};
+  
+                  // Debugging Logs
+                  // console.log('Sticker Type:', stickerType);
+                  // console.log('Image Source:', imageSource);
+  
+                  if (!imageSource) {
+                    console.error(
+                      `Sticker type "${stickerType}" not found in stickerMapping.`
+                    );
+                    return null;
+                  }
+  
+                  return (
+                    <img
+                      key={stickerIndex}
+                      src={imageSource}
+                      alt={`Sticker ${stickerIndex}`}
+                      style={{
+                        position: 'absolute',
+                        left: position.x,
+                        top: position.y,
+                        width: size.width,
+                        height: size.height,
+                        objectFit: 'contain',
+                        zIndex: 10,
+                      }}
+                    />
                   );
                 })}
+                {/* Tags Section */}
+                <p>
+                  {page.tags.map((tag, tagIndex) => (
+                    <span key={tagIndex}>#{tag} </span>
+                  ))}
+                </p>
               </div>
             ) : (
-              <p>No images available</p>
+              <p>No stickers/images available</p>
             )}
-
-{/* Stickers Section */}
-{page.stickers && page.stickers.length > 0 ? (
-  <div
-    style={{
-      position: 'relative', // Stickers are positioned relative to this container
-      width: '100%',
-      height: '100%',
-    }}
-  >
-    {page.stickers.map((sticker, stickerIndex) => {
-
-      const { stickerType, position = { x: 0, y: 0 }, size = { width: 100, height: 100 } } = sticker;
-
-      const { imageSource } = stickerMapping[stickerType] || {};
-      console.log(imageSource);
-
-
-      return (
-        <img
-          key={stickerIndex}
-          src={imageSource}
-          alt={`Sticker ${stickerIndex}`}
-          style={{
-            position: 'absolute', // Absolute positioning for precise placement
-            left: position.x, // Sticker's x-coordinate
-            top: position.y, // Sticker's y-coordinate
-            width: size.width, // Sticker's width
-            height: size.height, // Sticker's height
-            objectFit: 'contain', // Maintain aspect ratio
-            zIndex: 10, // Ensure stickers are layered above other elements
-          }}
-        />
-      );
-    })}
-  </div>
-) : (
-  <p>No stickers available</p>
-)}
-
-                        <p>
-                          {page.tags.map((tag,index) => (
-                            <span key={index}>#{tag} </span>
-                          ))}
-                        </p>
           </div>
         ))}
       </div>
     </div>
-  );
+  );  
 }

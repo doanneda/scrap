@@ -10,15 +10,7 @@ export default function CreatePage() {
   const [tags, setTags] = useState([]);
   const [error, setError] = useState('');
   const color = "paleGreen";
-  const stickers = [
-    {
-      "stickerType": "emoji",
-      "position": [
-        { "x": 10, "y": 20 },
-        { "x": 30, "y": 40 }
-      ]
-    },
-  ];
+
   const navigate = useNavigate();
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -50,6 +42,7 @@ export default function CreatePage() {
     updatedImages[index] = null;
     setImages(updatedImages);
   };
+
   const resizeImage = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -92,7 +85,6 @@ export default function CreatePage() {
     });
   };
   
-
   const handleUpload = async () => {
     // Check if all required images are uploaded
     if (images.filter((image) => image !== null).length !== numImages) {
@@ -101,10 +93,15 @@ export default function CreatePage() {
     }
   
     // Resize images and convert to Base64
-    const imagePromises = images.map((file) => resizeImage(file));
+    const imagePromises = images.map((file, index) => resizeImage(file).then((base64Data) => ({
+      base64Data,
+      type: file.type, // e.g., image/jpeg, image/png, etc.
+      position: { x: 0, y: 0 }, // You can add logic to position images if needed
+      size: { width: file.width, height: file.height }, // Add actual size if needed
+    })));
   
     try {
-      const resizedBase64Images = await Promise.all(imagePromises);
+      const resizedImages = await Promise.all(imagePromises);
   
       // Retrieve user token from local storage
       const token = localStorage.getItem('token');
@@ -112,21 +109,19 @@ export default function CreatePage() {
         setError('You must be logged in to upload a scrapbook page.');
         return;
       }
-
+  
       const now = new Date();
-
+  
       // Send to server
       const scrapData = {
-        binaryImages: resizedBase64Images,
+        images: resizedImages, // Pass the array of image objects with metadata
         description,
         color,
-        stickers,
         tags,
         timestamp: now,
       };
   
       const res = await axios.post(
-        // `${process.env.REACT_APP_SERVER_URL}/scrap-pages/post`,
         `http://localhost:4000/scrap-pages/post`,
         scrapData,
         {
@@ -138,20 +133,23 @@ export default function CreatePage() {
   
       console.log('Upload Successful', res.data);
   
+      // Capture the ID returned by MongoDB (assuming it's in res.data._id)
+      const pageId = res.data._id;
+  
       // Reset state after successful upload
       setError('');
       setImages(Array(numImages).fill(null));
       setDescription('');
       alert('Upload successful!');
+  
+      // Route to the Drag and Drop page with the generated ID
+      navigate(`/dnd/${pageId}`); // Use the pageId in the URL
     } catch (err) {
       console.error('Upload error:', err.message);
       setError('There was an error uploading the images.');
     }
-
-    // route to the feed page
-    navigate('/feed');
   };
-
+  
   // Handle change in the input field
   const handleTagInputChange = (e) => {
     setTagInput(e.target.value);
@@ -165,7 +163,6 @@ export default function CreatePage() {
       setTagInput(''); // Clear the input field
     }
   };
-  
 
   return (
     <div>

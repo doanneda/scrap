@@ -27,15 +27,6 @@ scrapPageRouter.put('/save-stickers', scrapPageController.saveStickers);
 scrapPageRouter.put('/save-images', scrapPageController.saveImages);
 
 
-
-scrapPageRouter.post('/get-stickers', scrapPageController.getStickers);
-scrapPageRouter.post('/get-images', scrapPageController.getImages);
-
-scrapPageRouter.put('/save-stickers', scrapPageController.saveStickers);
-scrapPageRouter.put('/save-images', scrapPageController.saveImages);
-
-
-
 scrapPageRouter.get('/by-tag', scrapPageController.getAllScrapPagesByTag);
 
 scrapPageRouter.delete('/:userId/pages/:pageId', auth, scrapPageController.deleteScrapPage);
