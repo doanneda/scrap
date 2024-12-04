@@ -343,7 +343,15 @@ export default function CreatePage() {
             )}
 
             <div>
-              {['4x3', '3x3', '3x4'].map((ratio) => (
+              {['4x3', '3x3', '3x4'].map((ratio) => {
+
+                const ratioStyles = {
+                  '4x3': { width: '53px', height: '40px' },
+                  '3x3': { width: '40px', height: '40px' },
+                  '3x4': { width: '40px', height: '53px' },
+                };
+
+                return(
                 <button
                   key={ratio}
                   style={{
@@ -353,12 +361,13 @@ export default function CreatePage() {
                     border: 'none',
                     borderRadius: '5px',
                     cursor: 'pointer',
+                    ...ratioStyles[ratio],
                   }}
                   onClick={() => handleRatioChange(index, ratio)}
                 >
                   {ratio}
-                </button>
-              ))}
+                </button>);
+              })}
             </div>
           </div>
         ))}
