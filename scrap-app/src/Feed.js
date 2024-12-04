@@ -154,6 +154,7 @@ export default function Feed() {
                 top: image.position.y,
                 width: image.size.width,
                 height: image.size.height,
+                borderRadius: '15px',
                 }}
             />
             ))}
