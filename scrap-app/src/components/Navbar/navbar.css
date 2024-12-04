@@ -1,0 +1,31 @@
+/* Navbar Styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #282c34;
+    color: #fff;
+  }
+  
+  .navbar .logo {
+    font-size: 24px;
+  }
+  
+  .navbar .links {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .navbar .button {
+    padding: 8px 16px;
+    background-color: #61dafb;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none; /* For Link components */
+  }
+  
+  .navbar .button:hover {
+    background-color: #4fa3d1; /* Change on hover for better UX */
+  }  
