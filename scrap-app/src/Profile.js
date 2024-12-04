@@ -125,7 +125,6 @@ export default function Profile() {
                                             top: image.position.y,
                                             width: image.size.width,
                                             height: image.size.height,
-                                            objectFit: 'cover',
                                         }}
                                     />
                                 ))}

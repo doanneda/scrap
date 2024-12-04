@@ -143,24 +143,21 @@ export default function Feed() {
                   height: '100%',
                 }}
               >
-                {page.images.map((image, imgIndex) => {
-                  console.log(image.base64Data);
-                  return(
-                    <img
-                      key={imgIndex}
-                      src={image.base64Data}
-                      alt={`Scrapbook ${imgIndex}`}
-                      style={{
-                        position: 'absolute',
-                        left: image.position.x,
-                        top: image.position.y,
-                        width: image.size.width,
-                        height: image.size.height,
-                        objectFit: 'cover',
-                      }}
-                    />
-                  )
-                })}
+            {page.images.map((image, imgIndex) => (
+            <img
+                key={imgIndex}
+                src={image.base64Data}
+                alt={`Scrapbook ${imgIndex}`}
+                style={{
+                position: 'absolute',
+                left: image.position.x,
+                top: image.position.y,
+                width: image.size.width,
+                height: image.size.height,
+                }}
+            />
+            ))}
+
                 {/* Stickers Section */}
                 {page.stickers.map((sticker, stickerIndex) => {
                   const {

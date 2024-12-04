@@ -8,8 +8,9 @@ export default function CreatePage() {
   const [description, setDescription] = useState('');
   const [tagInput, setTagInput] = useState('');
   const [tags, setTags] = useState([]);
+  const [ratios, setRatios] = useState(Array(1).fill('4x3')); // Default to '4x3' for all slots
   const [error, setError] = useState('');
-  const color = "paleGreen";
+  const color = "#ece7f1";
 
   const navigate = useNavigate();
 
@@ -41,6 +42,12 @@ export default function CreatePage() {
     const updatedImages = [...images];
     updatedImages[index] = null;
     setImages(updatedImages);
+  };
+
+  const handleRatioChange = (index, ratio) => {
+    const updatedRatios = [...ratios];
+    updatedRatios[index] = ratio;
+    setRatios(updatedRatios);
   };
 
   const resizeImage = (file) => {
@@ -92,13 +99,27 @@ export default function CreatePage() {
       return;
     }
   
+    // Define dimensions for each ratio
+    const ratioDimensions = {
+      "4x3": { width: 320, height: 240 },
+      "3x3": { width: 240, height: 240 },
+      "3x4": { width: 240, height: 320 },
+    };
+
     // Resize images and convert to Base64
-    const imagePromises = images.map((file, index) => resizeImage(file).then((base64Data) => ({
-      base64Data,
-      type: file.type, // e.g., image/jpeg, image/png, etc.
-      position: { x: 0, y: 0 }, // You can add logic to position images if needed
-      size: { width: file.width, height: file.height }, // Add actual size if needed
-    })));
+    const imagePromises = images.map((file, index) =>
+      resizeImage(file).then((base64Data) => {
+        const selectedRatio = ratios[index]; // Access the ratio for the specific image slot
+        const { width, height } = ratioDimensions[selectedRatio] || {}; // Fallback to default if ratioState is undefined
+
+        return {
+          base64Data,
+          type: file.type, // e.g., image/jpeg, image/png, etc.
+          position: { x: 0, y: 0 }, // Default position
+          size: { width, height }, // Use dimensions based on selected ratio
+        };
+      })
+    );
   
     try {
       const resizedImages = await Promise.all(imagePromises);
@@ -241,6 +262,25 @@ export default function CreatePage() {
                 />
               </label>
             )}
+
+            <div>
+              {['4x3', '3x3', '3x4'].map((ratio) => (
+                <button
+                  key={ratio}
+                  style={{
+                    margin: '5px',
+                    backgroundColor: ratios[index] === ratio ? 'blue' : 'gray',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '5px',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => handleRatioChange(index, ratio)}
+                >
+                  {ratio}
+                </button>
+              ))}
+            </div>
           </div>
         ))}
       </div>
