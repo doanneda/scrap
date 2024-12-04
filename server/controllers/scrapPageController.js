@@ -176,7 +176,6 @@ const saveImages = async (req, res) => {
       return res.status(404).json({ error: 'No ScrapPage found.' });
     }
 
-    // Update the stickers array
     scrapPage.images = images;
 
     // Save the updated document

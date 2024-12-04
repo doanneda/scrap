@@ -94,7 +94,7 @@ export default function DragAndDrop() {
 
     const imageData = images.map((image) => ({
       position: { x: image.x, y: image.y },
-      base64: image.base64Data,
+      base64Data: image.base64Data,
       size: image.size,
     }));
 

@@ -30,7 +30,13 @@ export default function Profile() {
         const fetchUserPages = async () => {
             try {
                 const res = await axios.get(`http://localhost:4000/profile/users/${userId}`);
-                setScrapPages(res.data.scrapPages);
+                const sortedPages = res.data.scrapPages.sort((a, b) => {
+                    const dateA = new Date(a.timestamp);
+                    const dateB = new Date(b.timestamp);
+                    return dateB - dateA; // For descending order
+                });
+
+                setScrapPages(sortedPages);
                 setUsername(res.data.username);
             } catch (err) {
                 console.error('Error fetching scrapbook pages:', err);
@@ -82,14 +88,15 @@ export default function Profile() {
             >
                 Return to Feed
             </Link>
-            <h1>{username ? `${username}'s Scrapbook Pages` : "Loading..."}</h1>
+            <h1 style={{textAlign: 'center'}}>{username ? `${username}'s Scrapbook Pages` : "Loading..."}</h1>
 
             <div
                 style={{
                     display: 'flex',
                     flexDirection: 'column',
+                    alignItems: 'center', // Center scrapbook pages horizontally
+                    justifyContent: 'center', // Center scrapbook pages vertically
                     overflowY: 'scroll',
-                    paddingRight: '20px',
                 }}
             >
                 {scrapPages.map((page, index) => (
@@ -111,6 +118,25 @@ export default function Profile() {
                             <h3>{page.username}</h3>
                         </Link>
                         <p>{page.description}</p>
+
+                        <p>{page.tags.map((tag, tagIndex) => <span key={tagIndex}>#{tag} </span>)}</p>
+
+                        {loggedInUserId && loggedInUserId === userId && (
+                            <button
+                                onClick={() => handleDelete(page._id)}
+                                style={{
+                                    marginTop: '10px',
+                                    padding: '5px 10px',
+                                    backgroundColor: '#FF0000',
+                                    color: '#fff',
+                                    border: 'none',
+                                    borderRadius: '5px',
+                                    cursor: 'pointer',
+                                }}
+                            >
+                                Delete
+                            </button>
+                        )}
 
                         {page.images && page.images.length > 0 ? (
                             <div style={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -155,23 +181,6 @@ export default function Profile() {
                                         />
                                     );
                                 })}
-                                <p>{page.tags.map((tag, tagIndex) => <span key={tagIndex}>#{tag} </span>)}</p>
-                                {loggedInUserId && loggedInUserId === userId && (
-                                    <button
-                                        onClick={() => handleDelete(page._id)}
-                                        style={{
-                                            marginTop: '10px',
-                                            padding: '5px 10px',
-                                            backgroundColor: '#FF0000',
-                                            color: '#fff',
-                                            border: 'none',
-                                            borderRadius: '5px',
-                                            cursor: 'pointer',
-                                        }}
-                                    >
-                                        Delete
-                                    </button>
-                                )}
                             </div>
                         ) : (
                             <p>Nothing to display</p>

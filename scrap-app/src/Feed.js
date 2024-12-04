@@ -110,8 +110,9 @@ export default function Feed() {
         style={{
           display: 'flex',
           flexDirection: 'column',
+          alignItems: 'center', // Center scrapbook pages horizontally
+          justifyContent: 'center', // Center scrapbook pages vertically
           overflowY: 'scroll',
-          paddingRight: '20px',
         }}
       >
         {filteredData.map((page, index) => (

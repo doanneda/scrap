@@ -9,7 +9,7 @@ export default function CreatePage() {
   const [tagInput, setTagInput] = useState('');
   const [tags, setTags] = useState([]);
   const [error, setError] = useState('');
-  const color = "paleGreen";
+  const color = "#ece7f1";
 
   const navigate = useNavigate();
 
