@@ -250,7 +250,7 @@ export default function CreatePage() {
           style={{
             padding: "10px 20px",
             marginLeft: "10px",
-            backgroundColor: "green",
+            backgroundColor: "#5C4033",
             color: "white",
             border: "none",
             borderRadius: "5px",
@@ -322,8 +322,8 @@ export default function CreatePage() {
               <label>
                 <div
                   style={{
-                    width: "100px",
-                    height: "100px",
+                    width: "200px",
+                    height: "200px",
                     border: "1px dashed gray",
                     display: "flex",
                     alignItems: "center",
@@ -356,7 +356,7 @@ export default function CreatePage() {
                   key={ratio}
                   style={{
                     margin: '5px',
-                    backgroundColor: ratios[index] === ratio ? 'blue' : 'gray',
+                    backgroundColor: ratios[index] === ratio ? '#5C4033' : 'gray',
                     color: 'white',
                     border: 'none',
                     borderRadius: '5px',
@@ -412,7 +412,7 @@ export default function CreatePage() {
         onClick={handleAddTag}
         style={{
           padding: '8px 16px',
-          backgroundColor: '#007bff',
+          backgroundColor: '#5C4033',
           color: 'white',
           border: 'none',
           borderRadius: '5px',
@@ -454,7 +454,7 @@ export default function CreatePage() {
           onClick={handleUpload}
           style={{
             padding: "10px 20px",
-            backgroundColor: "blue",
+            backgroundColor: "#5C4033",
             color: "white",
             border: "none",
             borderRadius: "5px",

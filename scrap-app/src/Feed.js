@@ -84,17 +84,17 @@ export default function Feed() {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          width: '30px',
+          width: '90px',
           height: '30px',
           backgroundColor: '#5C4033',
           color: 'white',
           textDecoration: 'none',
           padding: '10px 10px',
           borderRadius: '10px',
-          fontSize: '1.5rem',
+          fontSize: '1rem',
         }}
       >
-        +
+        Create Page
       </Link>
     </div>
 
@@ -115,32 +115,35 @@ export default function Feed() {
           marginBottom: '20px',
         }}
       >
-        <input
-          type="text"
-          placeholder="Search by tag..."
-          value={searchTag}
-          onChange={handleSearchChange}
-          style={{
-            padding: '8px',
-            width: '650px', // Increased width for a longer search bar
-            borderRadius: '5px 0 0 5px', // Rounded corners only on the left
-            border: '1px solid #ccc',
-            borderRight: 'none', // Remove border where button meets input
-          }}
-        />
-        <button
-          onClick={handleSearchClick}
-          style={{
-            padding: '8px 16px',
-            borderRadius: '0 5px 5px 0', // Rounded corners only on the right
-            backgroundColor: '#5C4033',
-            color: 'white',
-            border: '1px solid #007bff',
-            cursor: 'pointer',
-          }}
-        >
-          Search
-        </button>
+      <input
+        type="text"
+        placeholder="Search by tag..."
+        value={searchTag}
+        onChange={handleSearchChange}
+        style={{
+          padding: '0 8px',
+          height: '36px',
+          width: '650px',
+          borderRadius: '5px 0 0 5px',
+          border: '1px solid #ccc',
+          borderRight: 'none',
+        }}
+      />
+      <button
+        onClick={handleSearchClick}
+        style={{
+          padding: '0 16px',
+          height: '39px',
+          borderRadius: '0 5px 5px 0',
+          backgroundColor: '#5C4033',
+          color: 'white',
+          border: '1px solid #007bff',
+          cursor: 'pointer',
+        }}
+      >
+        Search
+      </button>
+
       </div>
 
   
@@ -162,7 +165,7 @@ export default function Feed() {
               padding: '10px',
               backgroundColor: '#eed9c4',
               width: '750px',
-              height: '882px',
+              height: '974px',
               marginBottom: '20px',
               position: 'relative',
               overflow: 'hidden',
@@ -216,7 +219,7 @@ export default function Feed() {
                 style={{
                   position: 'relative',
                   width: '100%',
-                  height: '85%',
+                  height: '77%',
                   backgroundColor: page.color || '#f9f9f9',
                   borderRadius: '10px',
                   boxShadow: '0 5px 5px rgba(0, 0, 0, 0.3)',
