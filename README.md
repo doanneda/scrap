@@ -75,3 +75,5 @@ npm start
 ```
 
 The website should open up as a new tab on your computer. If not, visit http://localhost:3000 to view the website.
+
+We hope you enjoy Scrap! :)
