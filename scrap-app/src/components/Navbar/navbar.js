@@ -27,10 +27,14 @@ const Navbar = ({ user, setUser }) => {
     }
   };
 
+  const handleLogo = () => {
+    navigate("/");
+  }
+
 
   return (
     <nav className="navbar">
-      <div className="logo">Your Logo</div>
+      <button onClick={handleLogo} className="logo">s c r a p</button>
       <div className="links">
         <button onClick={handleLogout} className="button">
           Log Out
