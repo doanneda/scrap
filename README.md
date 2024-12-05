@@ -30,7 +30,7 @@ If you haven't already, install [Node.js](https://nodejs.org/en/download) on you
 
 Create a .env file in the root directory of the server folder.
 
-Add the following environment variables in the .env file for the server:
+Add the following variables:
 
 ```
 MONGO_URI=
