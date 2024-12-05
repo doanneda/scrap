@@ -73,7 +73,7 @@ export default function Feed() {
         style={{
           fontSize: '3rem',
           margin: 0,
-          color: '#5C4033',
+          color: 'black',
         }}
       >
         Scrapbook Feed
