@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import "./navbar.css";
 import axios from "axios"; // Make sure you import axios
+import { Link } from 'react-router-dom';
 
 
 const Navbar = ({ user, setUser }) => {
@@ -27,14 +28,16 @@ const Navbar = ({ user, setUser }) => {
     }
   };
 
-  const handleLogo = () => {
-    navigate("/");
-  }
-
 
   return (
     <nav className="navbar">
-      <button onClick={handleLogo} className="logo">s c r a p</button>
+      <Link to="/" style={{
+          color: 'white',
+          textDecoration: 'none',
+          marginBottom: '10px',
+          borderRadius: '10px',
+          fontSize: '1.5rem',
+        }}>s c r a p</Link>
       <div className="links">
         <button onClick={handleLogout} className="button">
           Log Out
