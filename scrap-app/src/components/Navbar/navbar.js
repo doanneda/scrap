@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./navbar.css";
 import axios from "axios"; // Make sure you import axios
 import { Link } from 'react-router-dom';
+import logo from "../../assets/logo.png";
 
 
 const Navbar = ({ user, setUser }) => {
@@ -31,7 +32,17 @@ const Navbar = ({ user, setUser }) => {
 
   return (
     <nav className="navbar">
-      <Link to="/" className="nav-link">S c r a p</Link>
+      <Link to="/" className="nav-link">
+        <img
+          src={logo}
+          alt="Logo"
+          style={{
+            height: "25px",
+            marginRight: "15px",
+          }}
+        />
+        S c r a p
+      </Link>
       <div className="links">
         <button onClick={handleLogout} className="button">
           Log Out
