@@ -203,7 +203,7 @@ export default function Feed() {
                     backgroundColor: '#eeeeee',
                     borderRadius: '10px',
                     fontSize: '0.9rem',
-                    color: '#333',
+                    color: '#5C4033',
                   }}
                 >
                   #{tag}

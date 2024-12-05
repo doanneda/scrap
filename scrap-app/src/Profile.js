@@ -77,7 +77,7 @@ export default function Profile() {
                 to="/"
                 style={{
                     display: 'inline-block',
-                    backgroundColor: '#3498db',
+                    backgroundColor: '#5C4033',
                     color: 'white',
                     textDecoration: 'none',
                     padding: '10px 20px',
@@ -103,23 +103,56 @@ export default function Profile() {
                     <div
                         key={index}
                         style={{
-                            border: '1px solid #ccc',
                             borderRadius: '10px',
                             padding: '10px',
-                            backgroundColor: page.color || '#f9f9f9',
+                            backgroundColor: '#eed9c4',
                             width: '750px',
-                            height: '882px',
+                            height: '974px',
                             marginBottom: '20px',
                             position: 'relative',
                             overflow: 'hidden',
+                            boxShadow: '0 10px 10px rgba(0, 0, 0, 0.5)',
                         }}
                     >
-                        <Link to={`/profile/${page.user}`}>
-                            <h3>{page.username}</h3>
+                        <Link to={`/profile/${page.user}`} style={{
+                        color: '#5C4033',
+                        }}>
+                        <h3>{page.username}</h3>
                         </Link>
-                        <p>{page.description}</p>
 
-                        <p>{page.tags.map((tag, tagIndex) => <span key={tagIndex}>#{tag} </span>)}</p>
+                        <p style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            color: '#5C4033',
+                            textDecoration: 'none',
+                            fontSize: '1.5rem',
+                        }}>{page.description}</p>
+
+                        {/* Tags Section */}
+                        <p
+                        style={{
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            gap: '10px',
+                        }}
+                        >
+                        {page.tags.map((tag, tagIndex) => (
+                            <span
+                            key={tagIndex}
+                            style={{
+                                display: 'inline-block',
+                                padding: '5px 10px',
+                                backgroundColor: '#eeeeee',
+                                borderRadius: '10px',
+                                fontSize: '0.9rem',
+                                color: '#5C4033',
+                            }}
+                            >
+                            #{tag}
+                            </span>
+                        ))}
+                        </p>
 
                         {loggedInUserId && loggedInUserId === userId && (
                             <button
@@ -139,7 +172,14 @@ export default function Profile() {
                         )}
 
                         {page.images && page.images.length > 0 ? (
-                            <div style={{ position: 'relative', width: '100%', height: '85%' }}>
+                            <div style={{
+                                position: 'relative',
+                                width: '100%',
+                                height: '77%',
+                                backgroundColor: page.color || '#f9f9f9',
+                                borderRadius: '10px',
+                                boxShadow: '0 5px 5px rgba(0, 0, 0, 0.3)',
+                              }}>
                                 {page.images.map((image, imgIndex) => (
                                     <img
                                         key={imgIndex}
