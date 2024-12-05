@@ -5,27 +5,35 @@
     padding: 10px 20px;
     background-color: #282c34;
     color: #fff;
-  }
+}
   
-  .navbar .logo {
-    font-size: 24px;
-  }
-  
-  .navbar .links {
-    display: flex;
-    gap: 15px;
-  }
-  
-  .navbar .button {
-    padding: 8px 16px;
-    background-color: #5C4033;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    text-decoration: none; /* For Link components */
-  }
-  
-  .navbar .button:hover {
-    background-color: #8d5f4a; /* Change on hover for better UX */
-  }  
+.navbar .logo {
+  font-size: 24px;
+}
+
+.navbar .links {
+  display: flex;
+  gap: 15px;
+}
+
+.navbar .button {
+  padding: 8px 16px;
+  background-color: #5C4033;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none; /* For Link components */
+}
+
+.navbar .button:hover {
+  background-color: #8d5f4a; /* Change on hover for better UX */
+}  
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  font-size: 1.5rem;
+}

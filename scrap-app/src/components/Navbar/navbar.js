@@ -31,13 +31,7 @@ const Navbar = ({ user, setUser }) => {
 
   return (
     <nav className="navbar">
-      <Link to="/" style={{
-          color: 'white',
-          textDecoration: 'none',
-          marginBottom: '10px',
-          borderRadius: '10px',
-          fontSize: '1.5rem',
-        }}>s c r a p</Link>
+      <Link to="/" className="nav-link">S c r a p</Link>
       <div className="links">
         <button onClick={handleLogout} className="button">
           Log Out
