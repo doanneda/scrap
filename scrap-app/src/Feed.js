@@ -60,22 +60,44 @@ export default function Feed() {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h1>Scrapbook Pages</h1>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: '20px',
+        marginBottom: '50px',
+      }}
+    >
+      <h1
+        style={{
+          fontSize: '3rem',
+          margin: 0,
+          color: '#5C4033',
+        }}
+      >
+        Scrapbook Feed
+      </h1>
       <Link
         to="/createpage"
         style={{
-          display: 'inline-block',
-          backgroundColor: '#3498db',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '30px',
+          height: '30px',
+          backgroundColor: '#5C4033',
           color: 'white',
           textDecoration: 'none',
-          padding: '10px 20px',
-          marginBottom: '10px',
+          padding: '10px 10px',
           borderRadius: '10px',
-          fontSize: '1rem',
+          fontSize: '1.5rem',
         }}
       >
-        Create a Scrapbook Page
+        +
       </Link>
+    </div>
+
   
       {/* Error Message */}
       {error && (
@@ -85,7 +107,14 @@ export default function Feed() {
       )}
   
       {/* Search Input (By Tag) */}
-      <div style={{ marginBottom: '20px' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginBottom: '20px',
+        }}
+      >
         <input
           type="text"
           placeholder="Search by tag..."
@@ -93,26 +122,27 @@ export default function Feed() {
           onChange={handleSearchChange}
           style={{
             padding: '8px',
-            width: '300px',
-            borderRadius: '5px',
+            width: '650px', // Increased width for a longer search bar
+            borderRadius: '5px 0 0 5px', // Rounded corners only on the left
             border: '1px solid #ccc',
+            borderRight: 'none', // Remove border where button meets input
           }}
         />
         <button
           onClick={handleSearchClick}
           style={{
             padding: '8px 16px',
-            marginLeft: '10px',
-            borderRadius: '5px',
-            backgroundColor: '#007bff',
+            borderRadius: '0 5px 5px 0', // Rounded corners only on the right
+            backgroundColor: '#5C4033',
             color: 'white',
-            border: 'none',
+            border: '1px solid #007bff',
             cursor: 'pointer',
           }}
         >
           Search
         </button>
       </div>
+
   
       {/* Scrollable Container for Scrapbook Pages */}
       <div
@@ -128,21 +158,57 @@ export default function Feed() {
           <div
             key={index}
             style={{
-              border: '1px solid #ccc',
               borderRadius: '10px',
               padding: '10px',
-              backgroundColor: page.color || '#f9f9f9',
+              backgroundColor: '#eed9c4',
               width: '750px',
               height: '882px',
               marginBottom: '20px',
               position: 'relative',
               overflow: 'hidden',
+              boxShadow: '0 10px 10px rgba(0, 0, 0, 0.5)',
             }}
           >
-            <Link to={`/profile/${page.user}`}>
+            <Link to={`/profile/${page.user}`} style={{
+              color: '#5C4033',
+            }}>
               <h3>{page.username}</h3>
             </Link>
-            <p>{page.description}</p>
+
+            <p style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                color: '#5C4033',
+                textDecoration: 'none',
+                fontSize: '1.5rem',
+            }}>{page.description}</p>
+
+            {/* Tags Section */}
+            <p
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '10px',
+              }}
+            >
+              {page.tags.map((tag, tagIndex) => (
+                <span
+                  key={tagIndex}
+                  style={{
+                    display: 'inline-block',
+                    padding: '5px 10px',
+                    backgroundColor: '#eeeeee',
+                    borderRadius: '10px',
+                    fontSize: '0.9rem',
+                    color: '#333',
+                  }}
+                >
+                  #{tag}
+                </span>
+              ))}
+            </p>
+
   
             {/* Render Images */}
             {page.images && page.images.length > 0 ? (
@@ -151,6 +217,9 @@ export default function Feed() {
                   position: 'relative',
                   width: '100%',
                   height: '85%',
+                  backgroundColor: page.color || '#f9f9f9',
+                  borderRadius: '10px',
+                  boxShadow: '0 5px 5px rgba(0, 0, 0, 0.3)',
                 }}
               >
             {page.images.map((image, imgIndex) => (
@@ -206,12 +275,6 @@ export default function Feed() {
                     />
                   );
                 })}
-                {/* Tags Section */}
-                <p>
-                  {page.tags.map((tag, tagIndex) => (
-                    <span key={tagIndex}>#{tag} </span>
-                  ))}
-                </p>
               </div>
             ) : (
               <p>No stickers/images available</p>
