@@ -25,7 +25,22 @@ cd scrap
 
 If you haven't already, install [Node.js](https://nodejs.org/en/download) on your machine.
 
-[ADD SOMETHING ABOUT ENV FILE????]
+## Environment Setup
+
+Create a .env file in the root directory of the server folder.
+
+Add the following environment variables in the .env file for the server:
+
+```
+MONGO_URI=
+PORT=4000
+
+JWT_SECRET=
+SALT=10
+```
+
+- MONGO_URI: Insert the connection string for your MongoDB database. [UPDATE WITH MORE DETAILS]
+- JWT_SECRET: Insert the result of ```node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"```.
 
 ## Running the Website Locally
 
@@ -39,7 +54,7 @@ npm i
 npm start
 ```
 
-You should see the message [INSERT LATER].
+You should see the message ```Connected to database successfully``` in your terminal.
 
 3. In the other terminal, navigate into the client folder (called scrap-app). Then, install dependencies and start the backend server.
 
