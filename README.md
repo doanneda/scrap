@@ -6,7 +6,6 @@ A web platform where users contribute to a collective scrapbook by creating thei
 - [Prerequisites](#prerequisites)
 - [Environment Setup](#environment-setup)
 - [Running the Website Locally](#running-the-website-locally)
-- [Technologies Used](#technologies-used)
 
 ## Installation
 
@@ -76,11 +75,3 @@ npm start
 ```
 
 The website should open up as a new tab on your computer. If not, visit http://localhost:3000 to view the website.
-
-## Technologies Used
-
-MERN Stack:
-- MongoDB
-- Express
-- React.js
-- Node.js
