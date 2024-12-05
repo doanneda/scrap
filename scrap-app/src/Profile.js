@@ -129,11 +129,38 @@ export default function Profile() {
                             e.currentTarget.style.boxShadow = '0 10px 10px rgba(0, 0, 0, 0.5)';
                           }}
                     >
-                        <Link to={`/profile/${page.user}`} style={{
-                        color: '#5C4033',
-                        }}>
-                        <h3>{page.username}</h3>
+
+
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginBottom: '10px',
+                        }}
+                    >
+                        <Link to={`/profile/${page.user}`} style={{ color: '#5C4033', textDecoration: 'none' }}>
+                            <h3 style={{ margin: 0 }}>{page.username}</h3>
                         </Link>
+
+                        {loggedInUserId && loggedInUserId === userId && (
+                            <button
+                                onClick={() => handleDelete(page._id)}
+                                style={{
+                                    padding: '5px 10px',
+                                    backgroundColor: '#FF0000',
+                                    color: '#fff',
+                                    border: 'none',
+                                    borderRadius: '5px',
+                                    cursor: 'pointer',
+                                }}
+                            >
+                                X
+                            </button>
+                        )}
+                    </div>
+
+
 
                         <p style={{
                             display: 'flex',
@@ -169,22 +196,6 @@ export default function Profile() {
                         ))}
                         </p>
 
-                        {loggedInUserId && loggedInUserId === userId && (
-                            <button
-                                onClick={() => handleDelete(page._id)}
-                                style={{
-                                    marginTop: '10px',
-                                    padding: '5px 10px',
-                                    backgroundColor: '#FF0000',
-                                    color: '#fff',
-                                    border: 'none',
-                                    borderRadius: '5px',
-                                    cursor: 'pointer',
-                                }}
-                            >
-                                Delete
-                            </button>
-                        )}
 
                         {page.images && page.images.length > 0 ? (
                             <div style={{
