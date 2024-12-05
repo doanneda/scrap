@@ -49,7 +49,8 @@ To get the MONGO_URI, do the following:
 3. Configure your cluster by going to the cluster dashboard and clicking on the "Connect" button
 4. Select MongoDB for VS Code
 5. Add your current IP address for access
-6. Copy and paste the connection string for MONGO_URI (it should look like mongodb+srv://<username>:<password>@cluster0.mongodb.net/<dbname>?retryWrites=true&w=majority)
+6. Copy and paste the connection string for MONGO_URI
+   (it should look like mongodb+srv://<username>:<password>@cluster0.mongodb.net/<dbname>?retryWrites=true&w=majority)
 
  
 ## Running the Website Locally
