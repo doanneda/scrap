@@ -154,7 +154,6 @@ export default function Feed() {
           flexDirection: 'column',
           alignItems: 'center', // Center scrapbook pages horizontally
           justifyContent: 'center', // Center scrapbook pages vertically
-          overflowY: 'scroll',
         }}
       >
         {filteredData.map((page, index) => (
