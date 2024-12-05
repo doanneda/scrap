@@ -303,8 +303,8 @@ export default function CreatePage() {
                   src={URL.createObjectURL(images[index])}
                   alt="Preview"
                   style={{
-                    width: "100px",
-                    height: "100px",
+                    width: "200px",
+                    height: "200px",
                     objectFit: "cover",
                     margin: "auto",
                     display: "block",
