@@ -23,7 +23,7 @@ cd scrap
 
 ## Prerequisites
 
-If you haven't already, install [Node.js]([url](https://nodejs.org/en/download)) on your machine.
+If you haven't already, install [Node.js](https://nodejs.org/en/download) on your machine.
 
 [ADD SOMETHING ABOUT ENV FILE????]
 
