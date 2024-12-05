@@ -77,7 +77,7 @@ export default function Profile() {
                 to="/"
                 style={{
                     display: 'inline-block',
-                    backgroundColor: '#3498db',
+                    backgroundColor: '#5C4033',
                     color: 'white',
                     textDecoration: 'none',
                     padding: '10px 20px',
@@ -91,35 +91,83 @@ export default function Profile() {
             <h1 style={{textAlign: 'center'}}>{username ? `${username}'s Scrapbook Pages` : "Loading..."}</h1>
 
             <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center', // Center scrapbook pages horizontally
-                    justifyContent: 'center', // Center scrapbook pages vertically
-                    overflowY: 'scroll',
-                }}
+            style={{
+                display: 'flex',
+                overflowX: 'scroll',
+                scrollSnapType: 'x mandatory',
+                gap: '20px',
+                padding: '10px',
+                paddingLeft: 'calc(50vw - 375px)',
+                paddingRight: 'calc(50vw - 375px)',
+            }}
             >
                 {scrapPages.map((page, index) => (
                     <div
                         key={index}
                         style={{
-                            border: '1px solid #ccc',
+                            flex: '0 0 auto',
                             borderRadius: '10px',
                             padding: '10px',
-                            backgroundColor: page.color || '#f9f9f9',
+                            backgroundColor: '#eed9c4',
                             width: '750px',
-                            height: '882px',
-                            marginBottom: '20px',
+                            height: '974px',
                             position: 'relative',
                             overflow: 'hidden',
-                        }}
+                            boxShadow: '0 10px 10px rgba(0, 0, 0, 0.5)',
+                            scrollSnapAlign: 'center',
+                            transform: 'scale(0.9)',
+                            transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
+                          }}
+                          onMouseEnter={(e) => {
+                            // Scale up and add shadow on hover
+                            e.currentTarget.style.transform = 'scale(1)';
+                            e.currentTarget.style.boxShadow = '0 40px 40px rgba(0, 0, 0, 0.7)';
+                          }}
+                          onMouseLeave={(e) => {
+                            // Revert to normal state
+                            e.currentTarget.style.transform = 'scale(0.9)';
+                            e.currentTarget.style.boxShadow = '0 10px 10px rgba(0, 0, 0, 0.5)';
+                          }}
                     >
-                        <Link to={`/profile/${page.user}`}>
-                            <h3>{page.username}</h3>
+                        <Link to={`/profile/${page.user}`} style={{
+                        color: '#5C4033',
+                        }}>
+                        <h3>{page.username}</h3>
                         </Link>
-                        <p>{page.description}</p>
 
-                        <p>{page.tags.map((tag, tagIndex) => <span key={tagIndex}>#{tag} </span>)}</p>
+                        <p style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            color: '#5C4033',
+                            textDecoration: 'none',
+                            fontSize: '1.5rem',
+                        }}>{page.description}</p>
+
+                        {/* Tags Section */}
+                        <p
+                        style={{
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            gap: '10px',
+                        }}
+                        >
+                        {page.tags.map((tag, tagIndex) => (
+                            <span
+                            key={tagIndex}
+                            style={{
+                                display: 'inline-block',
+                                padding: '5px 10px',
+                                backgroundColor: '#eeeeee',
+                                borderRadius: '10px',
+                                fontSize: '0.9rem',
+                                color: '#5C4033',
+                            }}
+                            >
+                            #{tag}
+                            </span>
+                        ))}
+                        </p>
 
                         {loggedInUserId && loggedInUserId === userId && (
                             <button
@@ -139,7 +187,14 @@ export default function Profile() {
                         )}
 
                         {page.images && page.images.length > 0 ? (
-                            <div style={{ position: 'relative', width: '100%', height: '85%' }}>
+                            <div style={{
+                                position: 'relative',
+                                width: '100%',
+                                height: '77%',
+                                backgroundColor: page.color || '#f9f9f9',
+                                borderRadius: '10px',
+                                boxShadow: '0 5px 5px rgba(0, 0, 0, 0.3)',
+                              }}>
                                 {page.images.map((image, imgIndex) => (
                                     <img
                                         key={imgIndex}

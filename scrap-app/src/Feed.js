@@ -73,7 +73,7 @@ export default function Feed() {
         style={{
           fontSize: '3rem',
           margin: 0,
-          color: '#5C4033',
+          color: 'black',
         }}
       >
         Scrapbook Feed
@@ -147,31 +147,45 @@ export default function Feed() {
       </div>
 
   
-      {/* Scrollable Container for Scrapbook Pages */}
       <div
         style={{
           display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center', // Center scrapbook pages horizontally
-          justifyContent: 'center', // Center scrapbook pages vertically
-          overflowY: 'scroll',
-        }}
-      >
-        {filteredData.map((page, index) => (
-          <div
-            key={index}
-            style={{
-              borderRadius: '10px',
-              padding: '10px',
-              backgroundColor: '#eed9c4',
-              width: '750px',
-              height: '974px',
-              marginBottom: '20px',
-              position: 'relative',
-              overflow: 'hidden',
-              boxShadow: '0 10px 10px rgba(0, 0, 0, 0.5)',
-            }}
-          >
+          overflowX: 'scroll',
+          scrollSnapType: 'x mandatory',
+          gap: '20px',
+          padding: '10px',
+          paddingLeft: 'calc(50vw - 375px)',
+          paddingRight: 'calc(50vw - 375px)',
+      }}
+    >
+      {filteredData.map((page, index) => (
+        <div
+          key={index}
+          style={{
+            flex: '0 0 auto',
+            borderRadius: '10px',
+            padding: '10px',
+            backgroundColor: '#eed9c4',
+            width: '750px',
+            height: '974px',
+            position: 'relative',
+            overflow: 'hidden',
+            boxShadow: '0 10px 10px rgba(0, 0, 0, 0.5)',
+            scrollSnapAlign: 'center',
+            transform: 'scale(0.9)',
+            transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
+          }}
+          onMouseEnter={(e) => {
+            // Scale up and add shadow on hover
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.boxShadow = '0 40px 40px rgba(0, 0, 0, 0.7)';
+          }}
+          onMouseLeave={(e) => {
+            // Revert to normal state
+            e.currentTarget.style.transform = 'scale(0.9)';
+            e.currentTarget.style.boxShadow = '0 10px 10px rgba(0, 0, 0, 0.5)';
+          }}
+        >
             <Link to={`/profile/${page.user}`} style={{
               color: '#5C4033',
             }}>
@@ -204,7 +218,7 @@ export default function Feed() {
                     backgroundColor: '#eeeeee',
                     borderRadius: '10px',
                     fontSize: '0.9rem',
-                    color: '#333',
+                    color: '#5C4033',
                   }}
                 >
                   #{tag}

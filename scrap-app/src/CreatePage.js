@@ -261,8 +261,18 @@ export default function CreatePage() {
         </button>
       </div>
 
+{/* Image Upload Section with Beige Background */}
+<div
+  style={{
+    backgroundColor: "#eed9c4", // Beige background color
+    padding: "20px",
+    borderRadius: "10px",
+    marginBottom: "30px",
+  }}
+>
+
       {/* Number of Images */}
-      <div style={{ marginBottom: "20px" }}>
+      <div style={{ marginBottom: "20px"}}>
         <label>
           Select number of images:
           <select value={numImages} onChange={handleNumImagesChange} style={{ marginLeft: "10px", padding: "5px" }}>
@@ -387,6 +397,7 @@ export default function CreatePage() {
             border: "1px solid gray",
             borderRadius: "5px",
             resize: "vertical",
+            boxSizing: "border-box", // Ensure padding is included in width
           }}
         ></textarea>
       </div>
@@ -448,22 +459,37 @@ export default function CreatePage() {
         </div>
       )}
 
+</div>
+
       {/* Upload Button */}
-      <div style={{ textAlign: "center", marginBottom: "30px" }}>
-        <button
-          onClick={handleUpload}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#5C4033",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
-        >
-          Upload
-        </button>
-      </div>
+<div style={{ textAlign: "center", marginBottom: "30px" }}>
+  <button
+    onClick={handleUpload}
+    style={{
+      padding: "15px 30px", // Increase padding for a larger button
+      backgroundColor: "#5C4033", // Base color
+      color: "white",
+      fontSize: "18px", // Increase font size for better readability
+      fontWeight: "bold", // Make text stand out
+      border: "none",
+      borderRadius: "8px", // Slightly more rounded corners
+      cursor: "pointer",
+      boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.2)", // Add shadow for depth
+      transition: "all 0.3s ease", // Smooth hover effect
+    }}
+    onMouseEnter={(e) => {
+      e.target.style.backgroundColor = "#8d5f4a"; // Lighter shade on hover
+      e.target.style.transform = "scale(1.05)"; // Slightly enlarge button
+    }}
+    onMouseLeave={(e) => {
+      e.target.style.backgroundColor = "#5C4033"; // Return to original color
+      e.target.style.transform = "scale(1)"; // Reset size
+    }}
+  >
+    Upload
+  </button>
+</div>
+
     </div>
   );
 }
