@@ -4,6 +4,7 @@ A web platform where users contribute to a collective scrapbook by creating thei
 ## Table of Contents
 - [Installation](#installation)
 - [Prerequisites](#prerequisites)
+- [Environment Setup](#environment-setup)
 - [Running the Website Locally](#running-the-website-locally)
 - [Technologies Used](#technologies-used)
 
