@@ -6,7 +6,6 @@ A web platform where users contribute to a collective scrapbook by creating thei
 - [Prerequisites](#prerequisites)
 - [Environment Setup](#environment-setup)
 - [Running the Website Locally](#running-the-website-locally)
-- [Technologies Used](#technologies-used)
 
 ## Installation
 
@@ -40,9 +39,19 @@ JWT_SECRET=
 SALT=10
 ```
 
-- MONGO_URI: Insert the connection string for your MongoDB database. [UPDATE WITH MORE DETAILS]
+- MONGO_URI: Insert the connection string for your MongoDB database. See below for detailed instructions.
 - JWT_SECRET: Insert the result of ```node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"```.
 
+To get the MONGO_URI, do the following:
+1. Sign up or log in to MongoDB Atlas.
+2. Create a new cluster.
+3. Configure your cluster by going to the cluster dashboard and clicking on the "Connect" button.
+4. Select MongoDB for VS Code.
+5. Add your current IP address for access.
+6. Copy and paste the connection string for MONGO_URI
+   (it should look like mongodb+srv://<username>:<password>@cluster0.mongodb.net/<dbname>?retryWrites=true&w=majority).
+
+ 
 ## Running the Website Locally
 
 1. Open two terminals (one for the server and one for the client).
@@ -67,10 +76,4 @@ npm start
 
 The website should open up as a new tab on your computer. If not, visit http://localhost:3000 to view the website.
 
-## Technologies Used
-
-MERN Stack:
-- MongoDB
-- Express
-- React.js
-- Node.js
+We hope you enjoy Scrap! :)
